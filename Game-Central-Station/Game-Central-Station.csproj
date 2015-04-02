@@ -55,6 +55,18 @@
     <Compile Include="Connect.designer.cs">
       <DependentUpon>Connect.cs</DependentUpon>
     </Compile>
+    <Compile Include="DeveloperConsole\Account Details.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeveloperConsole\Account Details.Designer.cs">
+      <DependentUpon>Account Details.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DeveloperConsole\ChangePassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeveloperConsole\ChangePassword.Designer.cs">
+      <DependentUpon>ChangePassword.cs</DependentUpon>
+    </Compile>
     <Compile Include="DeveloperConsole\DeveloperMenu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,6 +126,12 @@
     </Compile>
     <EmbeddedResource Include="Connect.resx">
       <DependentUpon>Connect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DeveloperConsole\Account Details.resx">
+      <DependentUpon>Account Details.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DeveloperConsole\ChangePassword.resx">
+      <DependentUpon>ChangePassword.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DeveloperConsole\DeveloperMenu.resx">
       <DependentUpon>DeveloperMenu.cs</DependentUpon>

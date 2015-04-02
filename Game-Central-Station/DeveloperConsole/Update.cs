@@ -35,8 +35,8 @@ namespace GameCentralStation.DeveloperConsole
                         name = reader["gameName"].ToString(),
                         id = Int32.Parse(reader["gameID"].ToString())
                     };
-
-                    comboBox1.Items.Add(item);
+                    if(Boolean.Parse(reader["ready"].ToString()))
+                        comboBox1.Items.Add(item);
 
                 }
             }
