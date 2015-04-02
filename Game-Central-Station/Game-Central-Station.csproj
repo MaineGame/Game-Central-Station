@@ -79,6 +79,12 @@
     <Compile Include="DeveloperConsole\LoginSignup.Designer.cs">
       <DependentUpon>LoginSignup.cs</DependentUpon>
     </Compile>
+    <Compile Include="DeveloperConsole\Update.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeveloperConsole\Update.Designer.cs">
+      <DependentUpon>Update.cs</DependentUpon>
+    </Compile>
     <Compile Include="Download.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +126,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DeveloperConsole\LoginSignup.resx">
       <DependentUpon>LoginSignup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DeveloperConsole\Update.resx">
+      <DependentUpon>Update.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Download.resx">
       <DependentUpon>Download.cs</DependentUpon>
