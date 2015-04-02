@@ -295,9 +295,24 @@ namespace GameCentralStation
 
         }
 
+        private void advance()
+        {
+            if (Globals.userName != null)
+            {
+                new DeveloperMenu().ShowDialog();
+            }
+            else
+            {
+                //yeah this means you cancelled, not you failed.
+                //failing is handled in the login window.
+            }
+        }
+
         private void materialFlatButton1_Click(object sender, EventArgs e)
         {
+            
             new LoginSignup().ShowDialog();
+            advance();
             switchTabs(selected);
         }
 

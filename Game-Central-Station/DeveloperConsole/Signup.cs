@@ -48,7 +48,14 @@ namespace GameCentralStation.DeveloperConsole
             }
 
             Globals.userName = textBox1.Text;
+            MessageBox.Show("Account created. Press Okay to continue to the Developer Console.");
+            Close();
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

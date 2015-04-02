@@ -21,7 +21,8 @@ namespace GameCentralStation.DeveloperConsole
         private void button1_Click(object sender, EventArgs e)
         {
             new Login().ShowDialog();
-            advance();
+            if(Globals.userName != null)
+                Close();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -39,26 +40,17 @@ namespace GameCentralStation.DeveloperConsole
 
         private void LoginSignup_Load(object sender, EventArgs e)
         {
-            
-        }
-
-        private void advance()
-        {
             if (Globals.userName != null)
             {
-                new DeveloperMenu().ShowDialog();
-            }
-            else
-            {
-                //yeah this means you cancelled, not you failed.
-                //failing is handled in the login window.
+                Close();
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             new Signup().ShowDialog();
-            advance();
+            if (Globals.userName != null)
+                Close();
         }
     }
 }

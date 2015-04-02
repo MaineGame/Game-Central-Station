@@ -69,7 +69,7 @@ namespace GameCentralStation.DeveloperConsole
 
         private void materialCheckBox1_CheckedChanged(object sender, EventArgs e)
         {
-            materialRaisedButton4.Text = materialCheckBox1.Checked ? "Update" : "Upload";
+
         }
 
         //like honestly methodize this please.
@@ -137,7 +137,6 @@ namespace GameCentralStation.DeveloperConsole
                 string executableName = executablePath.Substring(executablePath.LastIndexOf("\\") + 1);
                 string dataFolderPath = folderBrowserDialog1.SelectedPath;
                 string dataFolderName = dataFolderPath.Substring(dataFolderPath.LastIndexOf("\\") + 1);
-                string passcode = materialSingleLineTextField5.Text;
                 string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
                 //Le Toucan Has Arrived
@@ -194,9 +193,9 @@ namespace GameCentralStation.DeveloperConsole
                                     materialSingleLineTextField3.Text + "\",\"" +
                                     "1000000" + "\",\"" +
                                     executableName + "\",\"" +
-                                    Globals.hash(materialSingleLineTextField5.Text) + "\",\"" +
                                     fileLength + "\"," +
-                                    "false" +
+                                    "false, \"" +
+                                    Globals.userName + "\"" +
                                 ");";
                                 command.ExecuteNonQuery();
                                 done = true;

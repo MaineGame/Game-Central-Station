@@ -75,6 +75,7 @@
             this.label1.Size = new System.Drawing.Size(339, 37);
             this.label1.TabIndex = 3;
             this.label1.Text = "Developer Console";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // button4
             // 
