@@ -20,8 +20,9 @@ namespace GameCentralStation
         public const string FTPIP = "169.244.195.143";
         //public const string FTPIP = "192.168.2.140";
         //public const string FTPIP = "localhost";
-        public const string userName = "GCSUser";
+        public const string FTPUser = "GCSUser";
         public const string password = "";
+        public static string userName = null;
 
 
         //cant be const because has to be set a runtime.
@@ -82,7 +83,7 @@ namespace GameCentralStation
             request.Method = WebRequestMethods.Ftp.DownloadFile;
 
             // This example assumes the FTP site uses anonymous logon.
-            request.Credentials = new NetworkCredential(userName, password);
+            request.Credentials = new NetworkCredential(FTPUser, password);
 
             FtpWebResponse response = (FtpWebResponse)request.GetResponse();
 
@@ -94,6 +95,7 @@ namespace GameCentralStation
         {
             throw new NotImplementedException();
         }
+
     }
 
     public enum Tab

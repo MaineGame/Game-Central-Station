@@ -61,6 +61,12 @@
     <Compile Include="DeveloperConsole\DeveloperMenu.Designer.cs">
       <DependentUpon>DeveloperMenu.cs</DependentUpon>
     </Compile>
+    <Compile Include="DeveloperConsole\Signup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeveloperConsole\Signup.Designer.cs">
+      <DependentUpon>Signup.cs</DependentUpon>
+    </Compile>
     <Compile Include="DeveloperConsole\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,6 +111,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DeveloperConsole\DeveloperMenu.resx">
       <DependentUpon>DeveloperMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DeveloperConsole\Signup.resx">
+      <DependentUpon>Signup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DeveloperConsole\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

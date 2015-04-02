@@ -15,11 +15,35 @@ namespace GameCentralStation.DeveloperConsole
         public LoginSignup()
         {
             InitializeComponent();
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             new Login().ShowDialog();
+            advance();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void LoginSignup_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((int)e.KeyChar == 27)
+            {
+                Close();
+            }
+        }
+
+        private void LoginSignup_Load(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void advance()
+        {
             if (Globals.userName != null)
             {
                 new DeveloperMenu().ShowDialog();
@@ -29,6 +53,12 @@ namespace GameCentralStation.DeveloperConsole
                 //yeah this means you cancelled, not you failed.
                 //failing is handled in the login window.
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            new Signup().ShowDialog();
+            advance();
         }
     }
 }

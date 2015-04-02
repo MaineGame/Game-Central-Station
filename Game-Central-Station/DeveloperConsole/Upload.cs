@@ -218,7 +218,7 @@ namespace GameCentralStation.DeveloperConsole
 
                 #region create the ID Folder on ftp
 
-                FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create("ftp://" + Globals.userName + ":" + Globals.password + "@" + Globals.FTPIP + "/games/" + gameID + "/");
+                FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create("ftp://" + Globals.FTPUser + ":" + Globals.password + "@" + Globals.FTPIP + "/games/" + gameID + "/");
                 ftpRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
                 ftpRequest.GetResponse();
 
@@ -233,11 +233,11 @@ namespace GameCentralStation.DeveloperConsole
                 //upload the zip to the ftp server
 
                 // Get the object used to communicate with the server.
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://" + Globals.userName + ":" + Globals.password + "@" + Globals.FTPIP + "/games/" + gameID + "/current.zip");
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://" + Globals.FTPUser + ":" + Globals.password + "@" + Globals.FTPIP + "/games/" + gameID + "/current.zip");
                 request.Method = WebRequestMethods.Ftp.UploadFile;
 
                 //so like double authentication is doubly secure. logical.
-                request.Credentials = new NetworkCredential(Globals.userName, Globals.password);
+                request.Credentials = new NetworkCredential(Globals.FTPUser, Globals.password);
 
                 // Copy the contents of the file to the request stream.
                 byte[] fileContents = File.ReadAllBytes(appdata + "\\GCS\\current.zip");
@@ -254,11 +254,11 @@ namespace GameCentralStation.DeveloperConsole
                 if (backgroundImagePath != "")
                 {
                     #region upload the image file
-                    FtpWebRequest request2 = (FtpWebRequest)WebRequest.Create("ftp://" + Globals.userName + ":" + Globals.password + "@" + Globals.FTPIP + "/games/" + gameID + "/default.jpg");
+                    FtpWebRequest request2 = (FtpWebRequest)WebRequest.Create("ftp://" + Globals.FTPUser + ":" + Globals.password + "@" + Globals.FTPIP + "/games/" + gameID + "/default.jpg");
                     request2.Method = WebRequestMethods.Ftp.UploadFile;
 
                     //so like double authentication is doubly secure. logical.
-                    request2.Credentials = new NetworkCredential(Globals.userName, Globals.password);
+                    request2.Credentials = new NetworkCredential(Globals.FTPUser, Globals.password);
 
                     // Copy the contents of the file to the request stream.
                     fileContents = File.ReadAllBytes(appdata + "\\GCS\\temp\\default.jpg");

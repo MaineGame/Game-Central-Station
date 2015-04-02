@@ -99,7 +99,7 @@ namespace GameCentralStation
                 //download it
                 try
                 {
-                    client.Credentials = new NetworkCredential(Globals.userName, Globals.password);
+                    client.Credentials = new NetworkCredential(Globals.FTPUser, Globals.password);
                     client.DownloadFileTaskAsync(new Uri("ftp://" + Globals.FTPIP + "/games/" + game.id + "/current.zip"), "" + Globals.root + "\\games\\temp.zip").Wait();
                     
                 }
