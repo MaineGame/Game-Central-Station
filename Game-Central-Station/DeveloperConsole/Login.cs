@@ -10,21 +10,16 @@ using System.Windows.Forms;
 
 namespace GameCentralStation.DeveloperConsole
 {
-    public partial class DeveloperMenu : Form
+    public partial class Login : Form
     {
-        public DeveloperMenu()
+        public Login()
         {
             InitializeComponent();
         }
 
-        private void DeveloperMenu_Load(object sender, EventArgs e)
+        private void Login_Load(object sender, EventArgs e)
         {
 
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            new Upload().ShowDialog();
         }
     }
 }

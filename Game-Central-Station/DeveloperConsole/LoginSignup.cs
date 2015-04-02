@@ -10,21 +10,25 @@ using System.Windows.Forms;
 
 namespace GameCentralStation.DeveloperConsole
 {
-    public partial class DeveloperMenu : Form
+    public partial class LoginSignup : Form
     {
-        public DeveloperMenu()
+        public LoginSignup()
         {
             InitializeComponent();
         }
 
-        private void DeveloperMenu_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            new Upload().ShowDialog();
+            new Login().ShowDialog();
+            if (Globals.userName != null)
+            {
+                new DeveloperMenu().ShowDialog();
+            }
+            else
+            {
+                //yeah this means you cancelled, not you failed.
+                //failing is handled in the login window.
+            }
         }
     }
 }

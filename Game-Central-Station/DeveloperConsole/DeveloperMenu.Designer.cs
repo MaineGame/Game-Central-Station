@@ -1,4 +1,4 @@
-﻿namespace Game_Central_Station.DeveloperConsole
+﻿namespace GameCentralStation.DeveloperConsole
 {
     partial class DeveloperMenu
     {
