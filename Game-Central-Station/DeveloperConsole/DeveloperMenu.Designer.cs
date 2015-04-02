@@ -56,6 +56,7 @@
             this.button2.TabIndex = 1;
             this.button2.Text = "Update Game";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
@@ -108,6 +109,8 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "DeveloperMenu";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "DeveloperMenu";
             this.Load += new System.EventHandler(this.DeveloperMenu_Load);
             this.ResumeLayout(false);

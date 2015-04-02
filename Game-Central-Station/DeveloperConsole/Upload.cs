@@ -132,10 +132,10 @@ namespace GameCentralStation.DeveloperConsole
                 //{
 
                 //variables for later methodization.
-                string backgroundImagePath = openFileDialog1.FileName;
-                string executablePath = openFileDialog2.FileName;
+                string backgroundImagePath = materialSingleLineTextField1.Text;
+                string executablePath = materialSingleLineTextField2.Text;
                 string executableName = executablePath.Substring(executablePath.LastIndexOf("\\") + 1);
-                string dataFolderPath = folderBrowserDialog1.SelectedPath;
+                string dataFolderPath = materialSingleLineTextField4.Text;
                 string dataFolderName = dataFolderPath.Substring(dataFolderPath.LastIndexOf("\\") + 1);
                 string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
@@ -153,7 +153,9 @@ namespace GameCentralStation.DeveloperConsole
                     Directory.CreateDirectory(appdata + "\\GCS\\temp");
                 if (File.Exists(appdata + "\\GCS\\temp\\default.jpg"))
                     File.Delete(appdata + "\\GCS\\temp\\default.jpg");
-                File.Copy(backgroundImagePath, appdata + "\\GCS\\temp\\default.jpg");
+                if(backgroundImagePath != "")
+                    File.Copy(backgroundImagePath, appdata + "\\GCS\\temp\\default.jpg");
+
                 if (File.Exists(appdata + "\\GCS\\temp\\" + executableName))
                     File.Delete(appdata + "\\GCS\\temp\\" + executableName);
                 File.Copy(executablePath, appdata + "\\GCS\\temp\\" + executableName);
@@ -198,12 +200,13 @@ namespace GameCentralStation.DeveloperConsole
                                     Globals.userName + "\"" +
                                 ");";
                                 command.ExecuteNonQuery();
+                                
                                 done = true;
                                 gameID = i;
                             }
                             catch (Exception ex)
                             {
-
+                                MessageBox.Show(ex.Message);
                             }
                         }
                     }

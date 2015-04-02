@@ -184,10 +184,17 @@ namespace GameCentralStation
 
         private void openGame(Game game)
         {
-            Process process = new Process();
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.FileName = Globals.root + "\\games\\" + game.id + "\\" + game.executableName;
-            process.Start();
+            try
+            {
+                Process process = new Process();
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.FileName = Globals.root + "\\games\\" + game.id + "\\" + game.executableName;
+                process.Start();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         private void switchTabs(Tab tab)

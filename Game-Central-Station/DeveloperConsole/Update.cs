@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,18 +23,26 @@ namespace GameCentralStation.DeveloperConsole
 
         private void Update_Load(object sender, EventArgs e)
         {
-            MySqlCommand command = new MySqlCommand("SELECT * FROM STORE WHERE username = \"" + Globals.userName + "\";");
-            command.Connection = Globals.connection;
-            MySqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())
+            try
             {
-                GameItem item = new GameItem() {
-                    name = reader["gameName"].ToString(),
-                    id = Int32.Parse(reader["gameID"].ToString())
-                };
+                MySqlCommand command = new MySqlCommand("SELECT * FROM store WHERE username = \"" + Globals.userName + "\";");
+                command.Connection = Globals.connection;
+                MySqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    GameItem item = new GameItem()
+                    {
+                        name = reader["gameName"].ToString(),
+                        id = Int32.Parse(reader["gameID"].ToString())
+                    };
 
-                comboBox1.Items.Add(item);
+                    comboBox1.Items.Add(item);
 
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -42,19 +51,31 @@ namespace GameCentralStation.DeveloperConsole
             openFileDialog1.ShowDialog();
             if (openFileDialog1.CheckFileExists)
             {
-                textBox2.Text = 
+                textBox2.Text = openFileDialog1.FileName;
             }
         }
-    }
 
-    private class GameItem
-    {
-        public string name { get; set; }
-        public int id { get; set; }
-
-        public string ToString()
+        private void button3_Click(object sender, EventArgs e)
         {
-            return "" + id + " - " + name;
+            folderBrowserDialog1.ShowDialog();
+            if (Directory.Exists(folderBrowserDialog1.SelectedPath))
+            {
+                textBox1.Text = folderBrowserDialog1.SelectedPath;
+            }
         }
+
+        protected class GameItem
+        {
+            public string name { get; set; }
+            public int id { get; set; }
+
+            public override string ToString()
+            {
+                return "" + id + " - " + name;
+            }
+        }
+
     }
+
+    
 }
