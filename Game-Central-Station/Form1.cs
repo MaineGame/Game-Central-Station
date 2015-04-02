@@ -297,7 +297,7 @@ namespace GameCentralStation
 
         private void materialFlatButton1_Click(object sender, EventArgs e)
         {
-            new Upload().ShowDialog();
+            new LoginSignup().ShowDialog();
             switchTabs(selected);
         }
 

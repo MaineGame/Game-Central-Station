@@ -69,7 +69,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(811, 389);
+            this.tabPage2.Size = new System.Drawing.Size(843, 389);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Library";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -113,14 +113,14 @@
             this.materialFlatButton1.AutoSize = true;
             this.materialFlatButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.materialFlatButton1.Depth = 0;
-            this.materialFlatButton1.Location = new System.Drawing.Point(626, 494);
+            this.materialFlatButton1.Location = new System.Drawing.Point(707, 494);
             this.materialFlatButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialFlatButton1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialFlatButton1.Name = "materialFlatButton1";
             this.materialFlatButton1.Primary = false;
-            this.materialFlatButton1.Size = new System.Drawing.Size(237, 36);
+            this.materialFlatButton1.Size = new System.Drawing.Size(152, 36);
             this.materialFlatButton1.TabIndex = 3;
-            this.materialFlatButton1.Text = "Upload/Update your own game";
+            this.materialFlatButton1.Text = "Developer Console";
             this.materialFlatButton1.UseVisualStyleBackColor = true;
             this.materialFlatButton1.Click += new System.EventHandler(this.materialFlatButton1_Click);
             // 
