@@ -29,6 +29,7 @@ namespace GameCentralStation.DeveloperConsole
             {
                 Globals.maintainDatabaseConnection();
                 MySqlCommand command = new MySqlCommand("select * from accounts where username = \"" + textBox1.Text + "\";");
+                command.Connection = Globals.connection;
                 MySqlDataReader reader = command.ExecuteReader();
                 reader.Read();
                 int passhash = Int32.Parse(reader["password"].ToString());
@@ -40,7 +41,7 @@ namespace GameCentralStation.DeveloperConsole
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Username and password combination incorrect.");
             }
         }
 
