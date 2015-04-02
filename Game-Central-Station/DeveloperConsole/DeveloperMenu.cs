@@ -31,5 +31,10 @@ namespace GameCentralStation.DeveloperConsole
         {
             new Update().ShowDialog();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            new Account_Details().ShowDialog();
+        }
     }
 }
