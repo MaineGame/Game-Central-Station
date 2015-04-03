@@ -20,8 +20,50 @@ namespace GameCentralStation
         public const string FTPIP = "169.244.195.143";
         public const string FTPUser = "GCSUser";
         public const string password = "";
-        public static string userName = null;
+        public static string userName = "rbowden";
 
+        public static Game[] getGamesWhere(string where)
+        {
+            //TODO if this ever ACTUALLY tries to open up a dialog, it will fail because
+            //materialskin and cross threadin even nastier than winforms cross threading.
+            Globals.maintainDatabaseConnection();
+
+            List<Game> games = new List<Game>();
+
+            MySqlCommand command = new MySqlCommand();
+            command.CommandText = "Select * from store where " + where + ";";
+            command.Connection = Globals.connection;
+            MySqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                try
+                {
+                    GameContract contract = new GameContract
+                    {
+                        executableName = reader["executable"].ToString(),
+                        versionString = reader["gameVersion"].ToString(),
+                        name = reader["gameName"].ToString(),
+                        id = reader["gameID"].ToString(),
+                        zipLength = reader["zipLength"].ToString(),
+                        archived = reader["archived"].ToString(),
+                        ready = reader["ready"].ToString()
+                    };
+                    Game game = Game.getGame(contract);
+                    if (contract != null)
+                        games.Add(game);
+                }
+                catch (Exception e)
+                {
+                    //some part of this listing was malformed.
+                    Globals.sendErrorLog(e);
+                }
+            }
+
+            reader.Close();
+
+            return games.ToArray<Game>();
+        }
 
         //cant be const because has to be set a runtime.
         //but please don't change it?
@@ -42,7 +84,8 @@ namespace GameCentralStation
                 new Connect().ShowDialog();
         }
 
-        public static Tab convert(string tab) {
+        public static Tab convert(string tab)
+        {
             switch (tab.ToLower())
             {
                 case "strore":
@@ -116,6 +159,10 @@ namespace GameCentralStation
         public string versionString { get; set; }
 
         public string zipLength { get; set; }
+
+        public string ready { get; set; }
+
+        public string archived { get; set; }
     }
 
     public class Game
@@ -128,6 +175,8 @@ namespace GameCentralStation
         public string executableName;
         public string displayName;
         public int zipLength;
+        public bool ready;
+        public bool archived;
 
         private Game(GameContract contract)
         {
@@ -136,15 +185,21 @@ namespace GameCentralStation
             name = contract.name;
             executableName = contract.executableName;
 
+            ready = Boolean.Parse(contract.ready);
+            archived = Boolean.Parse(contract.archived);
+
             zipLength = Int32.Parse(contract.zipLength);
 
-
             displayName = name.Replace("&", "&&");
+            /*
             int major = versionInteger / 1000000;
             int minor = (versionInteger - (major * 1000000)) / 10000;
             int build = (versionInteger - (major * 1000000) - (minor * 10000)) / 100;
             int revision = versionInteger - (major * 1000000) - (minor * 10000) - (build * 100);
+            
             version = major + "." + minor + "." + build + "." + revision;
+             */
+            version = "" + versionInteger;
         }
 
         public static Game getGame(GameContract contract)
@@ -158,6 +213,11 @@ namespace GameCentralStation
             {
                 return null;
             }
+        }
+
+        public override string ToString()
+        {
+            return id + "\t" + (archived ? "Archived" : (ready ? "Published" : "Corrupt")) + "\t" + name;
         }
 
     }

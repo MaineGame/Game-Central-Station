@@ -61,11 +61,23 @@
     <Compile Include="DeveloperConsole\Account Details.Designer.cs">
       <DependentUpon>Account Details.cs</DependentUpon>
     </Compile>
+    <Compile Include="DeveloperConsole\AreYouSure.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeveloperConsole\AreYouSure.Designer.cs">
+      <DependentUpon>AreYouSure.cs</DependentUpon>
+    </Compile>
     <Compile Include="DeveloperConsole\ChangePassword.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DeveloperConsole\ChangePassword.Designer.cs">
       <DependentUpon>ChangePassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DeveloperConsole\Delete.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeveloperConsole\Delete.Designer.cs">
+      <DependentUpon>Delete.cs</DependentUpon>
     </Compile>
     <Compile Include="DeveloperConsole\DeveloperMenu.cs">
       <SubType>Form</SubType>
@@ -124,8 +136,14 @@
     <EmbeddedResource Include="DeveloperConsole\Account Details.resx">
       <DependentUpon>Account Details.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DeveloperConsole\AreYouSure.resx">
+      <DependentUpon>AreYouSure.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DeveloperConsole\ChangePassword.resx">
       <DependentUpon>ChangePassword.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DeveloperConsole\Delete.resx">
+      <DependentUpon>Delete.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DeveloperConsole\DeveloperMenu.resx">
       <DependentUpon>DeveloperMenu.cs</DependentUpon>

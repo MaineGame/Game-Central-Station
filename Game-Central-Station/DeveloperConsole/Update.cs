@@ -23,28 +23,9 @@ namespace GameCentralStation.DeveloperConsole
 
         private void Update_Load(object sender, EventArgs e)
         {
-            try
-            {
-                MySqlCommand command = new MySqlCommand("SELECT * FROM store WHERE username = \"" + Globals.userName + "\";");
-                command.Connection = Globals.connection;
-                MySqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    GameItem item = new GameItem()
-                    {
-                        name = reader["gameName"].ToString(),
-                        id = Int32.Parse(reader["gameID"].ToString())
-                    };
-                    if (Boolean.Parse(reader["ready"].ToString()))
-                        comboBox1.Items.Add(item);
-
-                }
-                reader.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            games = Globals.getGamesWhere("username = " + Globals.userName);
+            foreach(Game game in games)
+                comboBox1.Items.Add(game);
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -71,18 +52,6 @@ namespace GameCentralStation.DeveloperConsole
             Close();
         }
 
-    }
-
-    public class GameItem
-    {
-        public string name { get; set; }
-        public int id { get; set; }
-        public bool ready { get; set; }
-
-        public override string ToString()
-        {
-            return "" + id + " - " + name + (ready ? "" : " (unpublished)");
-        }
     }
 
 }

@@ -37,5 +37,10 @@ namespace GameCentralStation.DeveloperConsole
             new Account_Details().ShowDialog();
             if (Globals.userName == null) Close();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            new Delete().ShowDialog();
+        }
     }
 }

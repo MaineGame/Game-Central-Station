@@ -13,6 +13,9 @@ namespace GameCentralStation.DeveloperConsole
 {
     public partial class Account_Details : Form
     {
+
+        private Game[] games;
+
         public Account_Details()
         {
             InitializeComponent();
@@ -32,24 +35,12 @@ namespace GameCentralStation.DeveloperConsole
         {
             label1.Text = "You are logged in as: " + Globals.userName;
             label2.Text = "Password: ********";
-            
-            MySqlCommand command = new MySqlCommand("SELECT * FROM store WHERE username = \"" + Globals.userName + "\";");
-            command.Connection = Globals.connection;
-            MySqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                GameItem item = new GameItem()
-                {
-                    name = reader["gameName"].ToString(),
-                    id = Int32.Parse(reader["gameID"].ToString()),
-                    ready = Boolean.Parse(reader["ready"].ToString())
-                };
-                listBox1.Items.Add(item);
+
+            games = Globals.getGamesWhere("username = \"" + Globals.userName + "\"");
+            foreach (Game game in games)
+                listBox1.Items.Add(game.ToString());
 
 
-
-            }
-            reader.Close();
         }
 
         private void button2_Click(object sender, EventArgs e)

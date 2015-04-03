@@ -117,7 +117,8 @@ namespace GameCentralStation
 
                 if (!downloaded)
                 {
-                    MaterialRaisedButton installButton = new MaterialRaisedButton();
+                    MaterialFlatButton installButton = new MaterialFlatButton();
+                    installButton.ForeColor = Color.Azure;
 
                     installButton.Text = "Install";
                     installButton.Click += delegate(object sender, EventArgs e)
@@ -216,51 +217,7 @@ namespace GameCentralStation
         //oh well, just in case there is later...
         private void loadStore()
         {
-            games = getGamesFromStore();
-        }
-
-        private Game[] getGamesFromStore()
-        {
-            //TODO if this ever ACTUALLY tries to open up a dialog, it will fail because
-            //materialskin and cross threadin even nastier than winforms cross threading.
-            Globals.maintainDatabaseConnection();
-
-            List<Game> games = new List<Game>();
-
-            MySqlCommand command = new MySqlCommand();
-            command.CommandText = "Select * from store;";
-            command.Connection = Globals.connection;
-            MySqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
-            {
-                try
-                {
-                    if (Boolean.Parse(reader["ready"].ToString()))
-                    {
-                        GameContract contract = new GameContract
-                        {
-                            executableName = reader["executable"].ToString(),
-                            versionString = reader["gameVersion"].ToString(),
-                            name = reader["gameName"].ToString(),
-                            id = reader["gameID"].ToString(),
-                            zipLength = reader["zipLength"].ToString()
-                        };
-                        Game game = Game.getGame(contract);
-                        if (contract != null)
-                            games.Add(game);
-                    }
-                }
-                catch (Exception e)
-                {
-                    //some part of this listing was malformed.
-                    Globals.sendErrorLog(e);
-                }
-            }
-
-            reader.Close();
-
-            return games.ToArray<Game>();
+            games = Globals.getGamesWhere("archived = false and ready = true");
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
