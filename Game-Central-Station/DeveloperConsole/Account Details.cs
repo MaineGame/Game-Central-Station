@@ -41,14 +41,12 @@ namespace GameCentralStation.DeveloperConsole
                 GameItem item = new GameItem()
                 {
                     name = reader["gameName"].ToString(),
-                    id = Int32.Parse(reader["gameID"].ToString())
+                    id = Int32.Parse(reader["gameID"].ToString()),
+                    ready = Boolean.Parse(reader["ready"].ToString())
                 };
-                if (Boolean.Parse(reader["ready"].ToString()))
-                {
-                    Label label = new Label();
-                    label.Text = item.ToString();
-                    flowLayoutPanel1.Controls.Add(label);
-                }
+                listBox1.Items.Add(item);
+
+
 
             }
             reader.Close();

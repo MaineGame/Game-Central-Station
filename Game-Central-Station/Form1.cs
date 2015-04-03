@@ -244,7 +244,7 @@ namespace GameCentralStation
                             versionString = reader["gameVersion"].ToString(),
                             name = reader["gameName"].ToString(),
                             id = reader["gameID"].ToString(),
-                            zipLength = reader["zipLength"].ToString()//TODO passcode
+                            zipLength = reader["zipLength"].ToString()
                         };
                         Game game = Game.getGame(contract);
                         if (contract != null)
@@ -318,7 +318,7 @@ namespace GameCentralStation
         private void materialFlatButton1_Click(object sender, EventArgs e)
         {
             
-            new LoginSignup().ShowDialog();
+            new Login().ShowDialog();
             advance();
             switchTabs(selected);
         }

@@ -85,12 +85,6 @@
     <Compile Include="DeveloperConsole\Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="DeveloperConsole\LoginSignup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DeveloperConsole\LoginSignup.Designer.cs">
-      <DependentUpon>LoginSignup.cs</DependentUpon>
-    </Compile>
     <Compile Include="DeveloperConsole\Update.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -141,9 +135,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DeveloperConsole\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DeveloperConsole\LoginSignup.resx">
-      <DependentUpon>LoginSignup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DeveloperConsole\Update.resx">
       <DependentUpon>Update.cs</DependentUpon>

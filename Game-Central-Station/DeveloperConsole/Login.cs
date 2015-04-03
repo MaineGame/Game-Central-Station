@@ -70,5 +70,10 @@ namespace GameCentralStation.DeveloperConsole
                 MessageBox.Show("Username and password combination incorrect.", "Error: " + ex.Message);
             }
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            new Signup(textBox1.Text, textBox2.Text).ShowDialog();
+        }
     }
 }

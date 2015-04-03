@@ -77,10 +77,11 @@ namespace GameCentralStation.DeveloperConsole
     {
         public string name { get; set; }
         public int id { get; set; }
+        public bool ready { get; set; }
 
         public override string ToString()
         {
-            return "" + id + " - " + name;
+            return "" + id + " - " + name + (ready ? "" : " (unpublished)");
         }
     }
 
