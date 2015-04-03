@@ -35,6 +35,7 @@ namespace GameCentralStation.DeveloperConsole
         private void button4_Click(object sender, EventArgs e)
         {
             new Account_Details().ShowDialog();
+            if (Globals.userName == null) Close();
         }
     }
 }

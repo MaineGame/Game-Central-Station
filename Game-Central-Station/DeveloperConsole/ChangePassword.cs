@@ -39,7 +39,9 @@ namespace GameCentralStation.DeveloperConsole
                 if(newpass1 == newpass2) {
 
                     command = new MySqlCommand("update store set password = " + newpass1 + " where username = \"" + Globals.userName + "\"");
-                    
+
+                    command.ExecuteNonQuery();
+
                     MessageBox.Show("successfully updated password!");
 
                     Close();
@@ -55,6 +57,11 @@ namespace GameCentralStation.DeveloperConsole
                 MessageBox.Show("Current password incorrect");
             }
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

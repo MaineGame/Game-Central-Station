@@ -35,10 +35,11 @@ namespace GameCentralStation.DeveloperConsole
                         name = reader["gameName"].ToString(),
                         id = Int32.Parse(reader["gameID"].ToString())
                     };
-                    if(Boolean.Parse(reader["ready"].ToString()))
+                    if (Boolean.Parse(reader["ready"].ToString()))
                         comboBox1.Items.Add(item);
 
                 }
+                reader.Close();
             }
             catch (Exception ex)
             {
@@ -64,18 +65,23 @@ namespace GameCentralStation.DeveloperConsole
             }
         }
 
-        protected class GameItem
-        {
-            public string name { get; set; }
-            public int id { get; set; }
 
-            public override string ToString()
-            {
-                return "" + id + " - " + name;
-            }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
     }
 
-    
+    public class GameItem
+    {
+        public string name { get; set; }
+        public int id { get; set; }
+
+        public override string ToString()
+        {
+            return "" + id + " - " + name;
+        }
+    }
+
 }

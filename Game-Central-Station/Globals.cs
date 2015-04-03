@@ -18,11 +18,9 @@ namespace GameCentralStation
     {
         public const string RDSDOMAIN = "mainegamesteam.cbzhynv0adrl.us-east-1.rds.amazonaws.com";
         public const string FTPIP = "169.244.195.143";
-        //public const string FTPIP = "192.168.2.140";
-        //public const string FTPIP = "localhost";
         public const string FTPUser = "GCSUser";
         public const string password = "";
-        public static string userName = null;
+        public static string userName = "cameron mathies";
 
 
         //cant be const because has to be set a runtime.
