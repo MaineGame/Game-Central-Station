@@ -137,6 +137,27 @@ namespace GameCentralStation
             throw new NotImplementedException();
         }
 
+
+        internal static bool deleteGame(Game game)
+        {
+
+            Globals.maintainDatabaseConnection();
+            try
+            {
+                MySqlCommand command = new MySqlCommand("update store set archived = true where gameID = " + game.id + ";");
+                command.Connection = Globals.connection;
+
+                command.ExecuteNonQuery();
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("" + ex.Message);
+                return false;
+            }
+
+        }
     }
 
     public enum Tab

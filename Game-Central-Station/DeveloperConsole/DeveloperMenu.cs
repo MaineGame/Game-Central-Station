@@ -42,5 +42,10 @@ namespace GameCentralStation.DeveloperConsole
         {
             new Delete().ShowDialog();
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            new Restore().ShowDialog();
+        }
     }
 }

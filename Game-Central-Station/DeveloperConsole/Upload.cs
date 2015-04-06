@@ -18,10 +18,18 @@ namespace GameCentralStation.DeveloperConsole
 {
     public partial class Upload : MaterialForm
     {
+        public bool success = false;
+
         public Upload()
         {
-            //MaterialSkinManager.Instance.Theme = MaterialSkinManager.Themes.DARK;
             InitializeComponent();
+        }
+
+        public Upload(Game template)
+        {
+            InitializeComponent();
+            materialSingleLineTextField3.Text = template.name;
+
         }
 
         private void textBox1_MouseDown(object sender, MouseEventArgs e)
@@ -197,7 +205,8 @@ namespace GameCentralStation.DeveloperConsole
                                     executableName + "\",\"" +
                                     fileLength + "\"," +
                                     "false, \"" +
-                                    Globals.userName + "\"" +
+                                    Globals.userName + "\"," +
+                                    "false" + 
                                 ");";
                                 command.ExecuteNonQuery();
                                 
@@ -315,6 +324,7 @@ namespace GameCentralStation.DeveloperConsole
                     materialLabel5.Text = "Creating zip";
                     break;
                 case DONESKI:
+                    success = true;
                     Close();
                     break;
 

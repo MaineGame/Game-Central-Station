@@ -25,5 +25,25 @@ namespace GameCentralStation.DeveloperConsole
             foreach (Game game in games)
                 listBox1.Items.Add(game.ToString());
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Game toDelete = games[listBox1.SelectedIndex];
+            AreYouSure delete = new AreYouSure(toDelete);
+            delete.ShowDialog();
+
+            if (delete.deleteSuccessful)
+            {
+                Close();
+                MessageBox.Show("" + toDelete.displayName + " successfully deleted.");
+            }
+
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }

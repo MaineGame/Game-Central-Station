@@ -20,7 +20,7 @@ namespace GameCentralStation.DeveloperConsole
 
         private void Login_Load(object sender, EventArgs e)
         {
-
+            if (Globals.userName != null) Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -74,6 +74,11 @@ namespace GameCentralStation.DeveloperConsole
         private void button3_Click(object sender, EventArgs e)
         {
             new Signup(textBox1.Text, textBox2.Text).ShowDialog();
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

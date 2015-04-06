@@ -348,9 +348,6 @@
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>348, 130</value>
   </data>
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
     <value>364, 168</value>
   </data>

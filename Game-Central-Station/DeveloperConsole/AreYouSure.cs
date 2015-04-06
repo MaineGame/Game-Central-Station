@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,16 +15,32 @@ namespace GameCentralStation.DeveloperConsole
     {
         private Game game;
 
+        public bool deleteSuccessful = false;
+
         public AreYouSure(Game game)
         {
             InitializeComponent();
+            label1.Text += game.displayName;
+            this.game = game;
         }
 
         private void AreYouSure_Load(object sender, EventArgs e)
         {
-            label1.Text += game.displayName;
 
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+
+            deleteSuccessful = Globals.deleteGame(game);
+            Close();
         }
     }
 }

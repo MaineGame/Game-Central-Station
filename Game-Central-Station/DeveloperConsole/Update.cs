@@ -23,33 +23,30 @@ namespace GameCentralStation.DeveloperConsole
 
         private void Update_Load(object sender, EventArgs e)
         {
-            games = Globals.getGamesWhere("username = " + Globals.userName);
-            foreach(Game game in games)
-                comboBox1.Items.Add(game);
+            games = Globals.getGamesWhere("username = \"" + Globals.userName + "\"");
+            foreach (Game game in games)
+                comboBox1.Items.Add(game.displayName);
         }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            openFileDialog1.ShowDialog();
-            if (openFileDialog1.CheckFileExists)
-            {
-                textBox2.Text = openFileDialog1.FileName;
-            }
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            folderBrowserDialog1.ShowDialog();
-            if (Directory.Exists(folderBrowserDialog1.SelectedPath))
-            {
-                textBox1.Text = folderBrowserDialog1.SelectedPath;
-            }
-        }
-
 
         private void button1_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            Game game = games[comboBox1.SelectedIndex];
+
+            Upload upload = new Upload(game);
+
+            upload.ShowDialog();
+
+            if (upload.success)
+            {
+                Globals.deleteGame(game);
+            }
+
         }
 
     }
