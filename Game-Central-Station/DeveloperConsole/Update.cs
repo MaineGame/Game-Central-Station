@@ -23,7 +23,7 @@ namespace GameCentralStation.DeveloperConsole
 
         private void Update_Load(object sender, EventArgs e)
         {
-            games = Globals.getGamesWhere("username = \"" + Globals.userName + "\"");
+            games = Globals.getGamesWhere("username = \"" + Globals.userName + "\" and archived = false and ready = true");
             foreach (Game game in games)
                 comboBox1.Items.Add(game.displayName);
         }

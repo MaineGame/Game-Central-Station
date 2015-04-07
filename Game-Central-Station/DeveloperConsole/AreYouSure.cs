@@ -20,7 +20,7 @@ namespace GameCentralStation.DeveloperConsole
         public AreYouSure(Game game)
         {
             InitializeComponent();
-            label1.Text += game.displayName;
+            label1.Text += game.displayName + " version " + game.versionInteger + "?";
             this.game = game;
         }
 

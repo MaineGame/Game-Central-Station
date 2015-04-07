@@ -37,6 +37,7 @@ namespace GameCentralStation.DeveloperConsole
             label2.Text = "Password: ********";
 
             games = Globals.getGamesWhere("username = \"" + Globals.userName + "\"");
+            listBox1.Items.Add(Game.headerGame.ToString());
             foreach (Game game in games)
                 listBox1.Items.Add(game.ToString());
 

@@ -22,14 +22,15 @@ namespace GameCentralStation.DeveloperConsole
 
         private void Restore_Load(object sender, EventArgs e)
         {
-            games = Globals.getGamesWhere("username = \"" + Globals.userName + "\"");
+            games = Globals.getGamesWhere("username = \"" + Globals.userName + "\" and ready = true and archived = true");
+            listBox1.Items.Add(Game.headerGame);
             foreach (Game game in games)
                 listBox1.Items.Add(game.ToString());
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Game game = games[listBox1.SelectedIndex];
+            Game game = games[listBox1.SelectedIndex - 1];
             Globals.maintainDatabaseConnection();
             try
             {
@@ -45,7 +46,6 @@ namespace GameCentralStation.DeveloperConsole
             {
                 MessageBox.Show("" + ex.Message);
             }
-            MessageBox.Show("");
         }
 
         private void button2_Click_1(object sender, EventArgs e)

@@ -53,6 +53,7 @@ namespace GameCentralStation
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             backgroundWorker1.ReportProgress(UNINSTALLING);
+
             Directory.Delete(Globals.root + "\\games\\" + game.id + "\\", true);
             backgroundWorker1.ReportProgress(DONE);
         }

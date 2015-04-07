@@ -19,6 +19,7 @@ namespace GameCentralStation.DeveloperConsole
     public partial class Upload : MaterialForm
     {
         public bool success = false;
+        private int version = 1;
 
         public Upload()
         {
@@ -29,6 +30,7 @@ namespace GameCentralStation.DeveloperConsole
         {
             InitializeComponent();
             materialSingleLineTextField3.Text = template.name;
+            version = template.versionInteger + 1;
 
         }
 
@@ -41,6 +43,7 @@ namespace GameCentralStation.DeveloperConsole
         {
             MaterialSkinManager.Instance.AddFormToManage(this);
             materialLabel5.Text = "";
+
         }
 
         private void materialFlatButton1_Click(object sender, EventArgs e)
@@ -201,12 +204,14 @@ namespace GameCentralStation.DeveloperConsole
                                 command.CommandText = "INSERT INTO store VALUES(\"" +
                                     i + "\",\"" +
                                     materialSingleLineTextField3.Text + "\",\"" +
-                                    "1000000" + "\",\"" +
+                                    version + "\",\"" +
                                     executableName + "\",\"" +
                                     fileLength + "\"," +
                                     "false, \"" +
                                     Globals.userName + "\"," +
-                                    "false" + 
+                                    "false," + 
+                                    "current_timestamp()," +
+                                    "current_timestamp()" +
                                 ");";
                                 command.ExecuteNonQuery();
                                 
@@ -215,7 +220,7 @@ namespace GameCentralStation.DeveloperConsole
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show(ex.Message);
+                                
                             }
                         }
                     }

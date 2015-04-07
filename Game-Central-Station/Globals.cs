@@ -20,7 +20,7 @@ namespace GameCentralStation
         public const string FTPIP = "169.244.195.143";
         public const string FTPUser = "GCSUser";
         public const string password = "";
-        public static string userName = "rbowden";
+        public static string userName = null;
 
         public static Game[] getGamesWhere(string where)
         {
@@ -188,6 +188,20 @@ namespace GameCentralStation
 
     public class Game
     {
+        public class HeaderGame : Game
+        {
+            public HeaderGame() : base(null)
+            {
+            }
+
+
+            public override string ToString()
+            {
+                return "Version\tStatus\tName";
+            }
+        }
+
+        public static Game headerGame = new HeaderGame();
 
         public string id;
         public int versionInteger;
@@ -201,26 +215,29 @@ namespace GameCentralStation
 
         private Game(GameContract contract)
         {
-            id = contract.id;
-            versionInteger = Int32.Parse(contract.versionString);
-            name = contract.name;
-            executableName = contract.executableName;
+            if (contract != null)
+            {
+                id = contract.id;
+                versionInteger = Int32.Parse(contract.versionString);
+                name = contract.name;
+                executableName = contract.executableName;
 
-            ready = Boolean.Parse(contract.ready);
-            archived = Boolean.Parse(contract.archived);
+                ready = Boolean.Parse(contract.ready);
+                archived = Boolean.Parse(contract.archived);
 
-            zipLength = Int32.Parse(contract.zipLength);
+                zipLength = Int32.Parse(contract.zipLength);
 
-            displayName = name.Replace("&", "&&");
-            /*
-            int major = versionInteger / 1000000;
-            int minor = (versionInteger - (major * 1000000)) / 10000;
-            int build = (versionInteger - (major * 1000000) - (minor * 10000)) / 100;
-            int revision = versionInteger - (major * 1000000) - (minor * 10000) - (build * 100);
+                displayName = name.Replace("&", "&&");
+                /*
+                int major = versionInteger / 1000000;
+                int minor = (versionInteger - (major * 1000000)) / 10000;
+                int build = (versionInteger - (major * 1000000) - (minor * 10000)) / 100;
+                int revision = versionInteger - (major * 1000000) - (minor * 10000) - (build * 100);
             
-            version = major + "." + minor + "." + build + "." + revision;
-             */
-            version = "" + versionInteger;
+                version = major + "." + minor + "." + build + "." + revision;
+                 */
+                version = "" + versionInteger;
+            }
         }
 
         public static Game getGame(GameContract contract)
@@ -238,7 +255,7 @@ namespace GameCentralStation
 
         public override string ToString()
         {
-            return id + "\t" + (archived ? "Archived" : (ready ? "Published" : "Corrupt")) + "\t" + name;
+            return versionInteger + "\t" + (archived ? "Archived" : (ready ? "Published" : "Corrupt")) + "\t" + name;
         }
 
     }
