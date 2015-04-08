@@ -20,7 +20,7 @@ namespace GameCentralStation
         public const string FTPIP = "169.244.195.143";
         public const string FTPUser = "GCSUser";
         public const string password = "";
-        public static string userName = null;
+        public static string userName = "rbowden";
 
         public static Game[] getGamesWhere(string where)
         {
@@ -47,7 +47,9 @@ namespace GameCentralStation
                         id = reader["gameID"].ToString(),
                         zipLength = reader["zipLength"].ToString(),
                         archived = reader["archived"].ToString(),
-                        ready = reader["ready"].ToString()
+                        ready = reader["ready"].ToString(),
+                        uploadTimeStamp = (DateTime)reader["uploadTimeStamp"],
+                        stampGroup = (DateTime)(reader["stampGroup"])
                     };
                     Game game = Game.getGame(contract);
                     if (contract != null)
@@ -165,7 +167,6 @@ namespace GameCentralStation
         STORE,
         LIBRARY,
         NOT_SET
-
     }
 
     //because everything pumps out of here a as a string.
@@ -184,6 +185,10 @@ namespace GameCentralStation
         public string ready { get; set; }
 
         public string archived { get; set; }
+
+        public DateTime uploadTimeStamp { get; set; }
+
+        public DateTime stampGroup { get; set; }
     }
 
     public class Game
@@ -212,6 +217,8 @@ namespace GameCentralStation
         public int zipLength;
         public bool ready;
         public bool archived;
+        public DateTime uploadTimeStamp;
+        public DateTime stampGroup;
 
         private Game(GameContract contract)
         {
@@ -221,22 +228,13 @@ namespace GameCentralStation
                 versionInteger = Int32.Parse(contract.versionString);
                 name = contract.name;
                 executableName = contract.executableName;
-
                 ready = Boolean.Parse(contract.ready);
                 archived = Boolean.Parse(contract.archived);
-
                 zipLength = Int32.Parse(contract.zipLength);
-
                 displayName = name.Replace("&", "&&");
-                /*
-                int major = versionInteger / 1000000;
-                int minor = (versionInteger - (major * 1000000)) / 10000;
-                int build = (versionInteger - (major * 1000000) - (minor * 10000)) / 100;
-                int revision = versionInteger - (major * 1000000) - (minor * 10000) - (build * 100);
-            
-                version = major + "." + minor + "." + build + "." + revision;
-                 */
                 version = "" + versionInteger;
+                this.uploadTimeStamp = contract.uploadTimeStamp;
+                this.stampGroup = contract.stampGroup;
             }
         }
 

@@ -34,12 +34,19 @@ namespace GameCentralStation.DeveloperConsole
             Globals.maintainDatabaseConnection();
             try
             {
-                MySqlCommand command = new MySqlCommand("update store set archived = false where gameID = " + game.id + ";");
+            
+                MySqlCommand command = new MySqlCommand("update store set archived = true where uploadTimeStamp = '" + game.uploadTimeStamp + "';");
                 command.Connection = Globals.connection;
-
                 command.ExecuteNonQuery();
+
+                command = new MySqlCommand("update store set archived = false where gameID = " + game.id + ";");
+                command.Connection = Globals.connection;
+                command.ExecuteNonQuery();
+
                 MessageBox.Show("" + game.displayName + " sucessfully restored!");
                 Close();
+                
+
 
             }
             catch (Exception ex)
