@@ -36,10 +36,10 @@ namespace GameCentralStation.DeveloperConsole
             {
 
                 string commandString = "" +
-                    "set @wat = (select stampGroup from store where gameID = " + game.id + "); " +
-                    "SET SQL_SAFE_UPDATES=false; " +
-                    "update store set archived = true where stampGroup = @wat;" + 
-                    "update store set archived = false where gameID = " + game.id;
+                    "set @wat = (select stampGroup from store where gameID = " + game.id + ")"; //+
+                    //"SET SQL_SAFE_UPDATES=false; " +
+                    //"update store set archived = true where stampGroup = @wat;" + 
+                    //"update store set archived = false where gameID = " + game.id + ";";
                 MySqlCommand command = new MySqlCommand(commandString);
                 command.Connection = Globals.connection;
                 command.ExecuteNonQuery();
@@ -50,7 +50,7 @@ namespace GameCentralStation.DeveloperConsole
 
 
             }
-            catch (Exception ex)
+            catch (MySqlException ex)
             {
                 MessageBox.Show("" + ex.Message);
             }
