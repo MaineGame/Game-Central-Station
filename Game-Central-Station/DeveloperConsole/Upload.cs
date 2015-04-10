@@ -20,6 +20,7 @@ namespace GameCentralStation.DeveloperConsole
     {
         public bool success = false;
         private int version = 1;
+        private int idGroup = 1;
 
         public Upload()
         {
@@ -31,6 +32,7 @@ namespace GameCentralStation.DeveloperConsole
             InitializeComponent();
             materialSingleLineTextField3.Text = template.name;
             version = template.versionInteger + 1;
+            idGroup = template.idGroup;
 
         }
 
@@ -192,11 +194,12 @@ namespace GameCentralStation.DeveloperConsole
                 command.Connection = Globals.connection;
 
                 //this thing man. tries to add the sql listing 999 times before it realizes there are no more game slots left. hopefully never going to happen?
+                //jk no do dat no more. probably horrible practice but eh.
                 {
                     bool done = false;
                     while (!done)
                     {
-                        for (int i = 1; i < 1000 && !done; i++)
+                        for (int i = 1; i < Int32.MaxValue && !done; i++)
                         {
                             try
                             {
@@ -209,8 +212,8 @@ namespace GameCentralStation.DeveloperConsole
                                     fileLength + "\"," +
                                     "false, \"" +
                                     Globals.userName + "\"," +
-                                    "false," + 
-                                    "current_timestamp()," +
+                                    "false," +
+                                    idGroup + "," +
                                     "current_timestamp()" +
                                 ");";
                                 command.ExecuteNonQuery();

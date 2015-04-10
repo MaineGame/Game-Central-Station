@@ -95,14 +95,25 @@ namespace GameCentralStation
 
                 try
                 {
-                    textPanel.BackgroundImage = Image.FromStream(Globals.getFile("/games/" + game.id + "/default.jpg"));
+                    Image image = Image.FromStream(Globals.getFile("/games/" + game.id + "/default.jpg"));
+                    image = ScaleImage(image, 300, 100);
+                    textPanel.BackgroundImage = image;
                 }
                 catch (Exception e)
                 {
-                    textPanel.BackgroundImage = Image.FromStream(Globals.getFile("/games/default.jpg"));
-                    textPanel.Controls.Add(nameLabel);
-                    textPanel.Controls.Add(versionLabel);
+                    try
+                    {
+                        System.Drawing.Image image = Image.FromStream(Globals.getFile("/games/" + game.id + "/default.png"));
+                        image = ScaleImage(image, 300, 100);
+                        textPanel.BackgroundImage = image;
+                    }catch(Exception ex) {
+                        textPanel.BackgroundImage = Image.FromStream(Globals.getFile("/games/default.jpg"));
+                        textPanel.Controls.Add(nameLabel);
+                        textPanel.Controls.Add(versionLabel);
+                    }
                 }
+
+                
 
                 FlowLayoutPanel buttonPanel = new FlowLayoutPanel();
                 buttonPanel.FlowDirection = FlowDirection.BottomUp;
@@ -169,6 +180,20 @@ namespace GameCentralStation
             materialTabControl1.TabPages[materialTabControl1.TabIndex].Controls.Clear();
             materialTabControl1.TabPages[materialTabControl1.TabIndex].Controls.Add(mainPanel);
 
+        }
+
+        private static Image ScaleImage(Image image, int maxWidth, int maxHeight)
+        {
+            var ratioX = (double)maxWidth / image.Width;
+            var ratioY = (double)maxHeight / image.Height;
+            var ratio = Math.Max(ratioX, ratioY);
+
+            var newWidth = (int)(image.Width * ratio);
+            var newHeight = (int)(image.Height * ratio);
+
+            var newImage = new Bitmap(newWidth, newHeight);
+            Graphics.FromImage(newImage).DrawImage(image, 0, 0, newWidth, newHeight);
+            return newImage;
         }
 
         private void uninstall(Game game)

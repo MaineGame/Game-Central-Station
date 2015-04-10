@@ -49,7 +49,7 @@ namespace GameCentralStation
                         archived = reader["archived"].ToString(),
                         ready = reader["ready"].ToString(),
                         uploadTimeStamp = (DateTime)reader["uploadTimeStamp"],
-                        stampGroup = (DateTime)(reader["stampGroup"])
+                        idGroup = reader["idGroup"].ToString()
                     };
                     Game game = Game.getGame(contract);
                     if (contract != null)
@@ -160,6 +160,47 @@ namespace GameCentralStation
             }
 
         }
+
+        private static Image controller = null;
+
+        public static Image createController()
+        {
+
+            if (Globals.controller == null)
+                Globals.controller = Image.FromStream(Globals.getFile("/games/default.jpg"));
+
+            Bitmap controller = new Bitmap((Image)Globals.controller.Clone());
+
+            double r = new Random().NextDouble();
+            double g = new Random().NextDouble();
+            double b = new Random().NextDouble();
+
+            Color[,] pixels = new Color[300, 100];
+            for(int y = 0; y < 100; y ++) {
+
+                for(int x = 0; x < 100; x ++) {
+
+                    pixels[x, y] = controller.GetPixel(x, y);
+                    
+                    int Rin = 0xFF & pixels[x, y].R;
+                    int Gin = 0xFF & pixels[x, y].G;
+                    int Bin = 0xFF & pixels[x, y].B;
+
+                    int Rout = (int)(Rin * r);
+                    int Gout = (int)(Rin * r);
+                    int Bout = (int)(Rin * r);
+                    /*
+                    pixels[x, y].R = Rout;
+                    pixels[x, y].G = Gout;
+                    pixels[x, y].B = Bout;
+                     */
+                }
+
+            }
+
+
+            return controller;
+        }
     }
 
     public enum Tab
@@ -188,14 +229,15 @@ namespace GameCentralStation
 
         public DateTime uploadTimeStamp { get; set; }
 
-        public DateTime stampGroup { get; set; }
+        public string idGroup { get; set; }
     }
 
     public class Game
     {
         public class HeaderGame : Game
         {
-            public HeaderGame() : base(null)
+            public HeaderGame()
+                : base(null)
             {
             }
 
@@ -218,7 +260,7 @@ namespace GameCentralStation
         public bool ready;
         public bool archived;
         public DateTime uploadTimeStamp;
-        public DateTime stampGroup;
+        public int idGroup;
 
         private Game(GameContract contract)
         {
@@ -234,7 +276,7 @@ namespace GameCentralStation
                 displayName = name.Replace("&", "&&");
                 version = "" + versionInteger;
                 this.uploadTimeStamp = contract.uploadTimeStamp;
-                this.stampGroup = contract.stampGroup;
+                this.idGroup = Int32.Parse(contract.idGroup);
             }
         }
 
