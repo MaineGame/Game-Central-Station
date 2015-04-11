@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-
 namespace GameCentralStation
 {
     static class Program
@@ -23,7 +22,6 @@ namespace GameCentralStation
             MaterialSkinManager.Instance.Theme = MaterialSkinManager.Themes.LIGHT;
             Globals.maintainDatabaseConnection();
             Application.Run(new Mist());
-            
         }
     }
 }

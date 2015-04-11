@@ -20,7 +20,7 @@ namespace GameCentralStation.DeveloperConsole
     {
         public bool success = false;
         private int version = 1;
-        private int idGroup = 1;
+        private int idGroup = -1;
 
         public Upload()
         {
@@ -213,8 +213,8 @@ namespace GameCentralStation.DeveloperConsole
                                     "false, \"" +
                                     Globals.userName + "\"," +
                                     "false," +
-                                    idGroup + "," +
-                                    "current_timestamp()" +
+                                    "current_timestamp()," +
+                                    (idGroup == -1 ? i : idGroup) + "" +
                                 ");";
                                 command.ExecuteNonQuery();
                                 

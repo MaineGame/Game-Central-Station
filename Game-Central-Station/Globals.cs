@@ -22,6 +22,8 @@ namespace GameCentralStation
         public const string password = "";
         public static string userName = "rbowden";
 
+        //test
+
         public static Game[] getGamesWhere(string where)
         {
             //TODO if this ever ACTUALLY tries to open up a dialog, it will fail because
@@ -48,7 +50,7 @@ namespace GameCentralStation
                         zipLength = reader["zipLength"].ToString(),
                         archived = reader["archived"].ToString(),
                         ready = reader["ready"].ToString(),
-                        uploadTimeStamp = (DateTime)reader["uploadTimeStamp"],
+                        uploadTimeStamp = reader["uploadTimeStamp"].ToString(),
                         idGroup = reader["idGroup"].ToString()
                     };
                     Game game = Game.getGame(contract);
@@ -227,7 +229,7 @@ namespace GameCentralStation
 
         public string archived { get; set; }
 
-        public DateTime uploadTimeStamp { get; set; }
+        public string uploadTimeStamp { get; set; }
 
         public string idGroup { get; set; }
     }
@@ -259,7 +261,7 @@ namespace GameCentralStation
         public int zipLength;
         public bool ready;
         public bool archived;
-        public DateTime uploadTimeStamp;
+        public string uploadTimeStamp;
         public int idGroup;
 
         private Game(GameContract contract)
