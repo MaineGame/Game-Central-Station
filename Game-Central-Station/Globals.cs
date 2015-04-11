@@ -22,8 +22,6 @@ namespace GameCentralStation
         public const string password = "";
         public static string userName = "rbowden";
 
-        //test
-
         public static Game[] getGamesWhere(string where)
         {
             //TODO if this ever ACTUALLY tries to open up a dialog, it will fail because
