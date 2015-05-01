@@ -20,7 +20,7 @@ namespace GameCentralStation
         public const string FTPIP = "169.244.195.143";
         public const string FTPUser = "GCSUser";
         public const string password = "";
-        public static string userName = "rbowden";
+        public static string userName = null;
 
         public static Game[] getGamesWhere(string where)
         {
