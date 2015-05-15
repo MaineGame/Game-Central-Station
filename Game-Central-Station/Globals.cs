@@ -98,9 +98,9 @@ namespace GameCentralStation
                     return Tab.NOT_SET;
             }
         }
-
-
-        public static string[] args;
+public
+        
+ static string[] args;
 
         public static bool hasArg(string arg)
         {
