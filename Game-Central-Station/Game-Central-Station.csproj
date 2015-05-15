@@ -41,13 +41,13 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>\\192.168.2.140\Installer\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Installer|AnyCPU'">
-    <OutputPath>..\..\GCSInstaller\GCSInstaller\</OutputPath>
+    <OutputPath>..\..\GCSInstaller\GCSInstaller\InstallerContent\</OutputPath>
     <Optimize>false</Optimize>
   </PropertyGroup>
   <ItemGroup>
