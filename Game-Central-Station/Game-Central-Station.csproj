@@ -50,6 +50,9 @@
     <OutputPath>..\..\GCSInstaller\GCSInstaller\InstallerContent\</OutputPath>
     <Optimize>false</Optimize>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Properties\logo.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MySql.Data">
       <HintPath>..\packages\MySql.Data.6.9.6\lib\net45\MySql.Data.dll</HintPath>
@@ -243,6 +246,10 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\logo.ico" />
+    <Content Include="Properties\logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

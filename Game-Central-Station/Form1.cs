@@ -68,6 +68,7 @@ namespace GameCentralStation
                 FlowLayoutPanel panel = new FlowLayoutPanel();
                 panel.FlowDirection = FlowDirection.LeftToRight;
                 panel.Size = new Size(400, 100);
+                panel.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
                 //panel.BorderStyle = BorderStyle.FixedSingle;
                 //panel.BackColor = Color.Transparent; 
 
@@ -110,7 +111,7 @@ namespace GameCentralStation
                         image = ScaleImage(image, 300, 100);
                         textPanel.BackgroundImage = image;
                     }catch(Exception ex) {
-                        textPanel.BackgroundImage = Image.FromStream(Globals.getFile("/games/default.jpg"));
+                        textPanel.BackgroundImage = Globals.createController();
                     }
                 }
                 textPanel.Controls.Add(nameLabel);
@@ -155,7 +156,6 @@ namespace GameCentralStation
 
                     installButton.Size = buttonSize;
                     //installButton.Dock = DockStyle.Right;
-                    buttonPanel.Controls.Add(installButton);
 
                     MaterialRaisedButton playButton = new MaterialRaisedButton();
                     playButton.BackColor = Color.Gray;
@@ -166,6 +166,7 @@ namespace GameCentralStation
                     };
                     playButton.Size = buttonSize;
                     buttonPanel.Controls.Add(playButton);
+                    buttonPanel.Controls.Add(installButton);
                 }
 
 
