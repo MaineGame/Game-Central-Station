@@ -20,8 +20,8 @@ namespace GameCentralStation
         public const string FTPIP = "169.244.195.143";
         public const string FTPUser = "GCSUser";
         public const string password = "";
-        public static string userName = "rbowden";
         private static Random random = new Random();
+        public static string userName = null;
 
         public static Game[] getGamesWhere(string where)
         {
@@ -99,9 +99,9 @@ namespace GameCentralStation
                     return Tab.NOT_SET;
             }
         }
-
-
-        public static string[] args;
+public
+        
+ static string[] args;
 
         public static bool hasArg(string arg)
         {

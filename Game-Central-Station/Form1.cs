@@ -88,13 +88,14 @@ namespace GameCentralStation
                 var nameMargin = nameLabel.Margin;
                 nameMargin.Top = 10;
                 nameLabel.Margin = nameMargin;
-                nameLabel.BackColor = Color.Transparent;
+
+                Color color = Color.FromArgb(150, 255, 255, 255);
+                nameLabel.BackColor = color;
+
 
                 MaterialLabel versionLabel = new MaterialLabel();
 
-                versionLabel.Text = "version " + game.version;
-                versionLabel.BackColor = Color.Transparent;
-
+                versionLabel.Text = "v" + game.version;
                 try
                 {
                     Image image = Image.FromStream(Globals.getFile("/games/" + game.id + "/default.jpg"));
@@ -109,11 +110,10 @@ namespace GameCentralStation
                         image = ScaleImage(image, 300, 100);
                         textPanel.BackgroundImage = image;
                     }catch(Exception ex) {
-
-                        textPanel.Controls.Add(nameLabel);
-                        textPanel.Controls.Add(versionLabel);
+                        textPanel.BackgroundImage = Image.FromStream(Globals.getFile("/games/default.jpg"));
                     }
                 }
+                textPanel.Controls.Add(nameLabel);
 
                 
 
