@@ -53,7 +53,7 @@
             this.Controls.Add(this.progressBar1);
             this.Name = "Connect";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Connecting to Games Database";
+            this.Text = "Connecting to Game Central Station";
             this.Load += new System.EventHandler(this.Connect_Load);
             this.ResumeLayout(false);
 

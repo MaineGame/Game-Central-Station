@@ -69,7 +69,7 @@ namespace GameCentralStation
                 panel.FlowDirection = FlowDirection.LeftToRight;
                 panel.Size = new Size(400, 100);
                 //panel.BorderStyle = BorderStyle.FixedSingle;
-                //panel.BackColor = Color.Transparent;
+                //panel.BackColor = Color.Transparent; 
 
                 FlowLayoutPanel textPanel = new FlowLayoutPanel();
                 
@@ -88,10 +88,12 @@ namespace GameCentralStation
                 var nameMargin = nameLabel.Margin;
                 nameMargin.Top = 10;
                 nameLabel.Margin = nameMargin;
+                nameLabel.BackColor = Color.Transparent;
 
                 MaterialLabel versionLabel = new MaterialLabel();
 
-                versionLabel.Text = "v" + game.version;
+                versionLabel.Text = "version " + game.version;
+                versionLabel.BackColor = Color.Transparent;
 
                 try
                 {
@@ -107,7 +109,7 @@ namespace GameCentralStation
                         image = ScaleImage(image, 300, 100);
                         textPanel.BackgroundImage = image;
                     }catch(Exception ex) {
-                        textPanel.BackgroundImage = Image.FromStream(Globals.getFile("/games/default.jpg"));
+
                         textPanel.Controls.Add(nameLabel);
                         textPanel.Controls.Add(versionLabel);
                     }
@@ -128,7 +130,7 @@ namespace GameCentralStation
 
                 if (!downloaded)
                 {
-                    MaterialFlatButton installButton = new MaterialFlatButton();
+                    MaterialRaisedButton installButton = new MaterialRaisedButton();
                     installButton.ForeColor = Color.Azure;
 
                     installButton.Text = "Install";

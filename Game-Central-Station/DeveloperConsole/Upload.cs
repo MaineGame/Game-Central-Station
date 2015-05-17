@@ -245,7 +245,6 @@ namespace GameCentralStation.DeveloperConsole
 
                 #endregion
 
-                //MessageBox.Show("Created the ID Folder on the FTP Server.");
                 backgroundWorker1.ReportProgress(ZIP_UPLOAD);
                 #region upload zip file to server
 
@@ -268,28 +267,32 @@ namespace GameCentralStation.DeveloperConsole
 
                 #endregion
 
-                //MessageBox.Show("Zip File succesfully uploaded!");
+                #region upload the image file
+                Boolean isController = false;
+                if(backgroundImagePath != "") {
+                    isController = true;
+                    Image image = Globals.createController();
 
-                if (backgroundImagePath != "")
-                {
-                    #region upload the image file
-                    FtpWebRequest request2 = (FtpWebRequest)WebRequest.Create("ftp://" + Globals.FTPUser + ":" + Globals.password + "@" + Globals.FTPIP + "/games/" + gameID + "/default.jpg");
-                    request2.Method = WebRequestMethods.Ftp.UploadFile;
-
-                    //so like double authentication is doubly secure. logical.
-                    request2.Credentials = new NetworkCredential(Globals.FTPUser, Globals.password);
-
-                    // Copy the contents of the file to the request stream.
-                    fileContents = File.ReadAllBytes(appdata + "\\GCS\\temp\\default.jpg");
-                    request2.ContentLength = fileContents.Length;
-
-                    requestStream = request2.GetRequestStream();
-                    requestStream.Write(fileContents, 0, fileContents.Length);
-                    requestStream.Close();
-
-                    #endregion
+                    image.Save(appdata + "\\GCS\\temp\\default.jpg");
                 }
 
+                FtpWebRequest request2 = (FtpWebRequest)WebRequest.Create("ftp://" + Globals.FTPUser + ":" + Globals.password + "@" + Globals.FTPIP + "/games/" + gameID + (isController ? "/controller.png" : "/default.jpg"));
+                request2.Method = WebRequestMethods.Ftp.UploadFile;
+
+                //so like double authentication is doubly secure. logical.
+                request2.Credentials = new NetworkCredential(Globals.FTPUser, Globals.password);
+
+                // Copy the contents of the file to the request stream.
+                fileContents = File.ReadAllBytes(appdata + "\\GCS\\temp\\default.jpg");
+                request2.ContentLength = fileContents.Length;
+
+                requestStream = request2.GetRequestStream();
+                requestStream.Write(fileContents, 0, fileContents.Length);
+                requestStream.Close();
+
+                #endregion
+
+                //finalizing in database
                 #region tell rds the files are ready!
 
                 Globals.maintainDatabaseConnection();

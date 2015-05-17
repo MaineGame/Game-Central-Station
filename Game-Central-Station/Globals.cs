@@ -21,6 +21,7 @@ namespace GameCentralStation
         public const string FTPUser = "GCSUser";
         public const string password = "";
         public static string userName = "rbowden";
+        private static Random random = new Random();
 
         public static Game[] getGamesWhere(string where)
         {
@@ -171,29 +172,33 @@ namespace GameCentralStation
 
             Bitmap controller = new Bitmap((Image)Globals.controller.Clone());
 
-            double r = new Random().NextDouble();
-            double g = new Random().NextDouble();
-            double b = new Random().NextDouble();
+            //find a pastel - y color multiplier
+            double r = random.NextDouble() / 2 + .5;
+            double g = random.NextDouble() / 2 + .5;
+            double b = random.NextDouble() / 2 + .5;
 
-            Color[,] pixels = new Color[300, 100];
             for(int y = 0; y < 100; y ++) {
+                for(int x = 0; x < 300; x ++) {
 
-                for(int x = 0; x < 100; x ++) {
+                    //snag the color in
+                    Color colorIn = controller.GetPixel(x, y);
 
-                    pixels[x, y] = controller.GetPixel(x, y);
-                    
-                    int Rin = 0xFF & pixels[x, y].R;
-                    int Gin = 0xFF & pixels[x, y].G;
-                    int Bin = 0xFF & pixels[x, y].B;
+                    //grab the components
+                    int Rin = 0xFF & colorIn.R;
+                    int Gin = 0xFF & colorIn.G;
+                    int Bin = 0xFF & colorIn.B;
 
+                    //multiplicitave overlay
                     int Rout = (int)(Rin * r);
-                    int Gout = (int)(Rin * r);
-                    int Bout = (int)(Rin * r);
-                    /*
-                    pixels[x, y].R = Rout;
-                    pixels[x, y].G = Gout;
-                    pixels[x, y].B = Bout;
-                     */
+                    int Gout = (int)(Gin * g);
+                    int Bout = (int)(Bin * b);
+
+                    //Console.WriteLine("Color: " + Rout + ", " + Gout + ", " + Bout);
+
+                    //color out and set new pixel
+                    Color colorOut = Color.FromArgb((255 << 24) | (Rout << 16) | (Gout << 8) | (Bout));
+                    controller.SetPixel(x, y, colorOut);
+                    
                 }
 
             }
