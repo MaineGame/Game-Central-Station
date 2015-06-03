@@ -32,7 +32,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\GCSInstaller\GCSInstaller\InstallerContent\</OutputPath>
+    <OutputPath>..\Build\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -52,6 +52,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Properties\logo.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MySql.Data">
@@ -253,8 +256,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy /y Game-Central-Station.exe ..\GCSInstaller\InstallerContent\Game-Central-Station.exe &amp; 
+copy /y MaterialSkin.dll ..\GCSInstaller\InstallerContent\MaterialSkin.dll &amp; 
+copy /y MySql.Data.dll ..\GCSInstaller\InstallerContent\MySql.Data.dll</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
