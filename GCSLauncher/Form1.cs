@@ -88,9 +88,8 @@ namespace GCSLauncher
 
                 #endregion
 
-                MessageBox.Show("Local: " + localVersion + " ftp: " + ftpVersion);
-
-                if (ftpVersion == localVersion)
+                
+                if (ftpVersion <= localVersion)
                 {
                     #region open up GCS
 
@@ -103,6 +102,9 @@ namespace GCSLauncher
                 }
                 else
                 {
+
+                    MessageBox.Show("There is a newer version of GCS available. Press okay to download it now.");
+
                     #region download the installer and reopen it
                     {
                         FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://" + ftpIP + "/GCSInstaller.exe");
