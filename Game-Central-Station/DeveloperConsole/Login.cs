@@ -46,7 +46,6 @@ namespace GameCentralStation.DeveloperConsole
             MySqlDataReader reader;
             try
             {
-                Globals.maintainDatabaseConnection();
                 MySqlCommand command = new MySqlCommand("select * from accounts where username = \"" + textBox1.Text + "\";");
                 command.Connection = Globals.connection;
                 reader = command.ExecuteReader();

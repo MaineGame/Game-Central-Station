@@ -188,8 +188,6 @@ namespace GameCentralStation.DeveloperConsole
 
                 #region tell the rds database that hey, this game exists man!
 
-                Globals.maintainDatabaseConnection();
-
                 MySqlCommand command = new MySqlCommand();
                 command.Connection = Globals.connection;
 
@@ -295,7 +293,6 @@ namespace GameCentralStation.DeveloperConsole
                 //finalizing in database
                 #region tell rds the files are ready!
 
-                Globals.maintainDatabaseConnection();
                 //Le Toucan Has Departed
                 command = new MySqlCommand();
                 command.Connection = Globals.connection;

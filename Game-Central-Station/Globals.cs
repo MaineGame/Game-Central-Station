@@ -14,6 +14,16 @@ using System.Windows.Forms;
 namespace GameCentralStation
 {
 
+    public class Debug
+    {
+        public static void log(string stuff)
+        {
+#if DEBUG
+            MessageBox.Show (stuff);
+#endif
+        }
+    }
+
     public class Globals
     {
         public const string RDSDOMAIN = "mainegamesteam.cbzhynv0adrl.us-east-1.rds.amazonaws.com";
@@ -27,7 +37,6 @@ namespace GameCentralStation
         {
             //TODO if this ever ACTUALLY tries to open up a dialog, it will fail because
             //materialskin and cross threadin even nastier than winforms cross threading.
-            Globals.maintainDatabaseConnection();
 
             List<Game> games = new List<Game>();
 
@@ -74,18 +83,6 @@ namespace GameCentralStation
 
         public static MySqlConnection connection = null;
         public static Process process = null;
-
-        //quick thing to call before accessing database commands just to be sure.
-        //also, should always call this from UI thread as it opens up a dialog.
-        public static void maintainDatabaseConnection()
-        {
-            //if for some reason that connection goes bad, reconnect it.
-            while (Globals.connection == null
-                || Globals.connection.State != ConnectionState.Open
-                || Globals.connection.IsPasswordExpired)
-
-                new Connect().ShowDialog();
-        }
 
         public static Tab convert(string tab)
         {
@@ -143,8 +140,6 @@ public
 
         internal static bool deleteGame(Game game)
         {
-
-            Globals.maintainDatabaseConnection();
             try
             {
                 MySqlCommand command = new MySqlCommand("update store set archived = true where gameID = " + game.id + ";");
@@ -163,6 +158,8 @@ public
         }
 
         private static Image controller = null;
+
+        //TODO make this cached and stuff.
 
         public static Image createController()
         {

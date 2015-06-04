@@ -38,7 +38,6 @@ namespace GameCentralStation
 
         private void Mist_Load(object sender, EventArgs e)
         {
-            materialLabel1.Text = "";
             WindowState = FormWindowState.Normal;
             if (Globals.hasArg("-K"))
             {
@@ -61,17 +60,18 @@ namespace GameCentralStation
             mainPanel.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
             foreach (Game game in games)
             {
-                //Console.Beep();
 
                 bool downloaded = File.Exists(Globals.root + "\\games\\" + game.id + "\\" + game.executableName);
 
+                Card card = new Card();
                 FlowLayoutPanel panel = new FlowLayoutPanel();
+                panel.BackColor = Color.Transparent;
                 panel.FlowDirection = FlowDirection.LeftToRight;
-                panel.Size = new Size(400, 100);
+                card.Controls.Add(panel);
+                panel.Size = new Size(402, 102);
                 panel.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
-                //panel.BorderStyle = BorderStyle.FixedSingle;
-                //panel.BackColor = Color.Transparent; 
-
+                panel.BorderStyle = BorderStyle.FixedSingle;
+                
                 FlowLayoutPanel textPanel = new FlowLayoutPanel();
                 
                 var textPanelMargin = textPanel.Margin;

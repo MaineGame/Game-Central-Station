@@ -71,7 +71,7 @@ namespace GCSInstaller
 
                 Close();
                 if(checkBox1.Checked)
-                    System.Diagnostics.Process.Start(installDir + "\\GCSLauncher.exe");
+                    System.Diagnostics.Process.Start(installDir + "\\Game-Central-Station.exe");
             }
         }
 
@@ -88,9 +88,8 @@ namespace GCSInstaller
             backgroundWorker1.ReportProgress(1);
             copyResource("GCSInstaller.InstallerContent.MySql.Data.dll", installDir + "\\MySql.Data.dll");
             backgroundWorker1.ReportProgress(2);
-            copyResource("GCSInstaller.InstallerContent.GCSLauncher.exe", installDir + "\\GCSLauncher.exe");
-            backgroundWorker1.ReportProgress(3);
             copyResource("GCSInstaller.InstallerContent.Game-Central-Station.exe", installDir + "\\Game-Central-Station.exe");
+            backgroundWorker1.ReportProgress(3);
             copyResource("GCSInstaller.InstallerContent.version.txt", installDir + "\\version.txt");
             backgroundWorker1.ReportProgress(4);
 
@@ -98,10 +97,11 @@ namespace GCSInstaller
                 string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
                 StreamWriter writer = new StreamWriter(deskDir + "\\Game Central Station.url");
                 writer.WriteLine("[InternetShortcut]");
-                writer.WriteLine("URL=file:///" + installDir + "\\GCSLauncher.exe");
+                writer.WriteLine("URL=file:///" + installDir + "\\Game-Central-Station.exe");
                 writer.Flush();
                 writer.Close();
             }
+
 
             backgroundWorker1.ReportProgress(DONE);
         }

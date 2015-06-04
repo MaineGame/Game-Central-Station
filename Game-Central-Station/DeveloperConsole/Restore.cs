@@ -31,7 +31,6 @@ namespace GameCentralStation.DeveloperConsole
         private void button1_Click(object sender, EventArgs e)
         {
             Game game = games[listBox1.SelectedIndex - 1];
-            Globals.maintainDatabaseConnection();
             try
             {
 

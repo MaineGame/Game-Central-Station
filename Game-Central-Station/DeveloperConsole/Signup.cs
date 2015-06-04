@@ -44,9 +44,6 @@ namespace GameCentralStation.DeveloperConsole
                 return;
             }
 
-            Globals.maintainDatabaseConnection();
-
-
             try
             {
                 MySqlCommand command = new MySqlCommand("insert into accounts values(\"" + textBox1.Text.ToLower() + "\", " + pass1Hash + ");");

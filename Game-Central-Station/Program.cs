@@ -20,7 +20,7 @@ namespace GameCentralStation
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             MaterialSkinManager.Instance.Theme = MaterialSkinManager.Themes.LIGHT;
-            Globals.maintainDatabaseConnection();
+            new Connect().ShowDialog();
             Application.Run(new Mist());
         }
     }
