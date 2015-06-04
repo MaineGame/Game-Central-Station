@@ -21,10 +21,15 @@ namespace GameCentralStation
 {
     public partial class Mist : MaterialForm
     {
-        private Tab selecting = Tab.NOT_SET;
-        private Tab selected = Tab.NOT_SET;
 
-        private Game[] games = null;
+        private Game[] storeGames = null;
+        private Game[] libraryGames = null;
+        private const int STORE = 0;
+        private const int LIBRARY = 1;
+        private const int ABOUT = 2;
+        private const int STORE_HARD = 3;
+        private const int LIBRARY_HARD = 4;
+        private int task = 0;
 
         private MaterialSkinManager manager = MaterialSkinManager.Instance;
 
@@ -38,151 +43,24 @@ namespace GameCentralStation
 
         private void Mist_Load(object sender, EventArgs e)
         {
+            string version = File.ReadAllText("version.txt");
+            try
+            {
+                label3.Text += (Int32.Parse(version.Substring(0, 2)) - 10) + "." + (Int32.Parse(version.Substring(2, 2))) + "." + (Int32.Parse(version.Substring(4, 2))) + " Revision " + (Int32.Parse(version.Substring(6, 2))) + ".";
+            }
+            catch (Exception ex)
+            {
+                label3.Text = "Version Parsing Error: " + ex.Message;
+            }
+            materialFlatButton1.ForeColor = Color.White;
+            BackColor = ((int)Primary.LightBlue700).ToColor();
             WindowState = FormWindowState.Normal;
             if (Globals.hasArg("-K"))
             {
                 WindowState = FormWindowState.Maximized;
                 Sizable = false;
             }
-            switchTabs(Tab.STORE);
-        }
-
-        private FlowLayoutPanel mainPanel = null;
-
-        //called upon selecting the store. called from the worker completed thing.
-        private void updateListings()
-        {
-            mainPanel = new FlowLayoutPanel();
-            mainPanel.AutoScroll = true;
-            mainPanel.FlowDirection = FlowDirection.LeftToRight;
-            //mainPanel.BorderStyle = BorderStyle.FixedSingle;
-            mainPanel.Size = materialTabControl1.TabPages[materialTabControl1.TabIndex].Size;
-            mainPanel.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
-            foreach (Game game in games)
-            {
-
-                bool downloaded = File.Exists(Globals.root + "\\games\\" + game.id + "\\" + game.executableName);
-
-                Card card = new Card();
-                FlowLayoutPanel panel = new FlowLayoutPanel();
-                panel.BackColor = Color.Transparent;
-                panel.FlowDirection = FlowDirection.LeftToRight;
-                card.Controls.Add(panel);
-                panel.Size = new Size(402, 102);
-                panel.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
-                panel.BorderStyle = BorderStyle.FixedSingle;
-                
-                FlowLayoutPanel textPanel = new FlowLayoutPanel();
-                
-                var textPanelMargin = textPanel.Margin;
-                textPanel.MouseEnter += focusscroll;
-                textPanelMargin.All = 0;
-                textPanel.Margin = textPanelMargin;
-                textPanel.Size = new Size(300, 100);
-                textPanel.FlowDirection = FlowDirection.TopDown;
-
-                MaterialLabel nameLabel = new MaterialLabel();
-                
-                nameLabel.Font = new Font(nameLabel.Font.FontFamily, 20, FontStyle.Regular);
-                nameLabel.AutoSize = true;
-                nameLabel.Text = game.displayName;
-                var nameMargin = nameLabel.Margin;
-                nameMargin.Top = 10;
-                nameLabel.Margin = nameMargin;
-
-                Color color = Color.FromArgb(150, 255, 255, 255);
-                nameLabel.BackColor = color;
-
-
-                MaterialLabel versionLabel = new MaterialLabel();
-
-                versionLabel.Text = "v" + game.version;
-                try
-                {
-                    Image image = Image.FromStream(Globals.getFile("/games/" + game.id + "/default.jpg"));
-                    image = ScaleImage(image, 300, 100);
-                    textPanel.BackgroundImage = image;
-                }
-                catch (Exception e)
-                {
-                    try
-                    {
-                        System.Drawing.Image image = Image.FromStream(Globals.getFile("/games/" + game.id + "/default.png"));
-                        image = ScaleImage(image, 300, 100);
-                        textPanel.BackgroundImage = image;
-                    }catch(Exception ex) {
-                        textPanel.BackgroundImage = Globals.createController();
-                    }
-                }
-                textPanel.Controls.Add(nameLabel);
-
-                
-
-                FlowLayoutPanel buttonPanel = new FlowLayoutPanel();
-                buttonPanel.FlowDirection = FlowDirection.BottomUp;
-                //buttonPanel.BorderStyle = BorderStyle.FixedSingle;
-                buttonPanel.Size = new Size(100, 100);
-                var buttonPanelMargin = buttonPanel.Margin;
-                buttonPanelMargin.All = 0;
-                buttonPanel.Margin = buttonPanelMargin;
-                buttonPanel.MouseEnter += focusscroll;
-                //buttonPanel.BorderStyle = BorderStyle.FixedSingle;
-                Size buttonSize = new Size(93, 20);
-
-                if (!downloaded)
-                {
-                    MaterialRaisedButton installButton = new MaterialRaisedButton();
-                    installButton.ForeColor = Color.Azure;
-
-                    installButton.Text = "Install";
-                    installButton.Click += delegate(object sender, EventArgs e)
-                    {
-                        downloadGame(game);
-                    };
-
-                    installButton.Size = buttonSize;
-                    //installButton.Dock = DockStyle.Right;
-                    buttonPanel.Controls.Add(installButton);
-                }
-                else
-                {
-                    MaterialRaisedButton installButton = new MaterialRaisedButton();
-
-                    installButton.Text = "Uninstall";
-                    installButton.Click += delegate(object sender, EventArgs e)
-                    {
-                        uninstall(game);
-                    };
-
-                    installButton.Size = buttonSize;
-                    //installButton.Dock = DockStyle.Right;
-
-                    MaterialRaisedButton playButton = new MaterialRaisedButton();
-                    playButton.BackColor = Color.Gray;
-                    playButton.Text = "Play";
-                    playButton.Click += delegate(object sender, EventArgs e)
-                    {
-                        openGame(game);
-                    };
-                    playButton.Size = buttonSize;
-                    buttonPanel.Controls.Add(playButton);
-                    buttonPanel.Controls.Add(installButton);
-                }
-
-
-
-                panel.Controls.Add(textPanel);
-                panel.Controls.Add(buttonPanel);
-
-                mainPanel.Controls.Add(panel);
-
-
-
-            }
-
-            materialTabControl1.TabPages[materialTabControl1.TabIndex].Controls.Clear();
-            materialTabControl1.TabPages[materialTabControl1.TabIndex].Controls.Add(mainPanel);
-
+            hardReloadStorePage();
         }
 
         private static Image ScaleImage(Image image, int maxWidth, int maxHeight)
@@ -202,13 +80,13 @@ namespace GameCentralStation
         private void uninstall(Game game)
         {
             new Uninstall(game).ShowDialog();
-            switchTabs(selected);
+            hardReloadStorePage(); //TODO SAME
         }
 
         private void downloadGame(Game game)
         {
             new Download(game).ShowDialog();
-            switchTabs(selected);
+            hardReloadStorePage(); //TODO make CURRENT PAGE
         }
 
         private void openGame(Game game)
@@ -226,65 +104,65 @@ namespace GameCentralStation
             }
         }
 
-        private void switchTabs(Tab tab)
+        private void reloadStoreGamesList()
         {
-            if (!backgroundWorker1.IsBusy)
-            {
-                selecting = tab;
-                backgroundWorker1.RunWorkerAsync();
-            }
-        }
-
-        //this happens directly after click, before any animation...
-        private void materialTabControl1_Selected(object sender, TabControlEventArgs e)
-        {
-            switchTabs(Globals.convert(e.TabPage.Text));
-        }
-
-        //pretty simple method, thought there would be more to this. there wasn't
-        //oh well, just in case there is later...
-        private void loadStore()
-        {
-            games = Globals.getGamesWhere("archived = false and ready = true");
+            storeGames = Globals.getGamesWhere("archived = false and ready = true");
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            //primary objective of this method is to load the right games into the games array.
 
-            //leaving this here to alert future me that thisis a BAD IDEA.
-            //i know it seems like a good idea, but picture this:
-            //you open up the store and just moments after a new game title is added.
-            //in order ti get that title, you immediately refresh the page. but that
-            //doesn't work as you are never actually contacting the server.
-            //this should only ever happen if the array is not set to change.
-            //and the only time that would make any sense is when you install a game and simply
-            //need to reload the screen to enble the play button.
-            if (selecting == selected)
+            switch (task)
             {
-                //dont need to load anything new into our games array.
-                //this is just a refreshing call.
-                //return;
+                case STORE:
+                    break;
+                case LIBRARY:
+                    break;
+                case STORE_HARD:
+                    {
+                        reloadStoreGamesList();
+
+
+
+                    }
+                    break;
+
             }
-            
-            //if we want the store, i.e. parameter passed
-            if (selecting == Tab.STORE)
-            {
-                loadStore();
-            }
+
         }
 
-        
+        private void reloadStorePage()
+        {
+            task = STORE;
+            backgroundWorker1.RunWorkerAsync();
+        }
+
+        private void hardReloadStorePage()
+        {
+            task = STORE_HARD;
+            backgroundWorker1.RunWorkerAsync();
+        }
+
+        private void reloadLibraryPage()
+        {
+            task = LIBRARY;
+            backgroundWorker1.RunWorkerAsync();
+        }
+
+        private void hardReloadLibraryPage()
+        {
+            task = LIBRARY_HARD;
+            backgroundWorker1.RunWorkerAsync();
+        }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            updateListings();
-            selected = selecting;
+            //TODO stuff
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-
+            //TODO stuff
         }
 
         private void advance()
@@ -305,7 +183,7 @@ namespace GameCentralStation
             
             new Login().ShowDialog();
             advance();
-            switchTabs(selected);
+            
         }
 
         private void materialLabel1_Click(object sender, EventArgs e)
@@ -313,12 +191,9 @@ namespace GameCentralStation
 
         }
 
-        private void focusscroll(object sender, EventArgs e)
+        private void materialTabControl1_Selected(object sender, TabControlEventArgs e)
         {
-            if (mainPanel != null)
-            {
-                mainPanel.Focus();
-            }
+            
         }
     }
 }

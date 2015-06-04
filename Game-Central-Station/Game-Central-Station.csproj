@@ -262,9 +262,9 @@
   <ItemGroup>
     <Content Include="Properties\logo.ico" />
     <Content Include="Properties\logo.png" />
-    <EmbeddedResource Include="version.txt">
+    <Content Include="version.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -273,6 +273,14 @@ copy /y MaterialSkin.dll ..\GCSInstaller\InstallerContent\MaterialSkin.dll &amp;
 copy /y MySql.Data.dll ..\GCSInstaller\InstallerContent\MySql.Data.dll &amp;
 copy /y version.txt ..\GCSIPublisher\PublishContent\version.txt &amp;
 copy /y version.txt ..\GCSInstaller\InstallerContent\version.txt</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>cd.. &amp; 
+cd Game-Central-Station &amp; 
+set /p derp=&lt;version.txt &amp; 
+echo %25derp%25 &amp; 
+set /a derp2=%25derp%25+1 &amp; 
+echo %25derp2%25&gt;version.txt</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

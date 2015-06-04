@@ -84,21 +84,7 @@ namespace GameCentralStation
         public static MySqlConnection connection = null;
         public static Process process = null;
 
-        public static Tab convert(string tab)
-        {
-            switch (tab.ToLower())
-            {
-                case "strore":
-                    return Tab.STORE;
-                case "library":
-                    return Tab.LIBRARY;
-                default:
-                    return Tab.NOT_SET;
-            }
-        }
-public
-        
- static string[] args;
+        public static string[] args;
 
         public static bool hasArg(string arg)
         {
@@ -203,13 +189,6 @@ public
 
             return controller;
         }
-    }
-
-    public enum Tab
-    {
-        STORE,
-        LIBRARY,
-        NOT_SET
     }
 
     //because everything pumps out of here a as a string.

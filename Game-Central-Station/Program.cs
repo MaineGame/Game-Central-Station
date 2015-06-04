@@ -19,7 +19,9 @@ namespace GameCentralStation
             Globals.args = args;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            MaterialSkinManager.Instance.Theme = MaterialSkinManager.Themes.LIGHT;
+            var materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.LightBlue700, Primary.LightBlue800, Primary.Red100, Accent.Amber200, TextShade.WHITE);
             new Connect().ShowDialog();
             Application.Run(new Mist());
         }
