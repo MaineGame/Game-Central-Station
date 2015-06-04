@@ -21,7 +21,7 @@ namespace GameCentralStation.DeveloperConsole
 
         private void Delete_Load(object sender, EventArgs e)
         {
-            games = Globals.getGamesWhere("username = \"" + Globals.userName + "\" and archived = false and ready = true");
+            games = DatabaseHelper.getGamesWhere("username = \"" + Globals.userName + "\" and archived = false and ready = true");
             listBox1.Items.Add(Game.headerGame);
             foreach (Game game in games)
                 listBox1.Items.Add(game.ToString());

@@ -47,7 +47,7 @@ namespace GameCentralStation.DeveloperConsole
             try
             {
                 MySqlCommand command = new MySqlCommand("select * from accounts where username = \"" + textBox1.Text + "\";");
-                command.Connection = Globals.connection;
+                command.Connection = DatabaseHelper.connection;
                 reader = command.ExecuteReader();
                 reader.Read();
                 int passhash = Int32.Parse(reader["password"].ToString());

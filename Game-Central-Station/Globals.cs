@@ -26,62 +26,17 @@ namespace GameCentralStation
 
     public class Globals
     {
-        public const string RDSDOMAIN = "mainegamesteam.cbzhynv0adrl.us-east-1.rds.amazonaws.com";
         public const string FTPIP = "169.244.195.143";
         public const string FTPUser = "GCSUser";
         public const string password = "";
         private static Random random = new Random();
         public static string userName = null;
-
-        public static Game[] getGamesWhere(string where)
-        {
-            //TODO if this ever ACTUALLY tries to open up a dialog, it will fail because
-            //materialskin and cross threadin even nastier than winforms cross threading.
-
-            List<Game> games = new List<Game>();
-
-            MySqlCommand command = new MySqlCommand();
-            command.CommandText = "Select * from store where " + where + ";";
-            command.Connection = Globals.connection;
-            MySqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
-            {
-                try
-                {
-                    GameContract contract = new GameContract
-                    {
-                        executableName = reader["executable"].ToString(),
-                        versionString = reader["gameVersion"].ToString(),
-                        name = reader["gameName"].ToString(),
-                        id = reader["gameID"].ToString(),
-                        zipLength = reader["zipLength"].ToString(),
-                        archived = reader["archived"].ToString(),
-                        ready = reader["ready"].ToString(),
-                        uploadTimeStamp = reader["uploadTimeStamp"].ToString(),
-                        idGroup = reader["idGroup"].ToString()
-                    };
-                    Game game = Game.getGame(contract);
-                    if (contract != null)
-                        games.Add(game);
-                }
-                catch (Exception e)
-                {
-                    //some part of this listing was malformed.
-                    Globals.sendErrorLog(e);
-                }
-            }
-
-            reader.Close();
-
-            return games.ToArray<Game>();
-        }
+        
 
         //cant be const because has to be set a runtime.
         //but please don't change it?
         public static string root = "";
 
-        public static MySqlConnection connection = null;
         public static Process process = null;
 
         public static string[] args;
@@ -124,24 +79,7 @@ namespace GameCentralStation
         }
 
 
-        internal static bool deleteGame(Game game)
-        {
-            try
-            {
-                MySqlCommand command = new MySqlCommand("update store set archived = true where gameID = " + game.id + ";");
-                command.Connection = Globals.connection;
-
-                command.ExecuteNonQuery();
-                return true;
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("" + ex.Message);
-                return false;
-            }
-
-        }
+        
 
         private static Image controller = null;
 
@@ -192,92 +130,5 @@ namespace GameCentralStation
     }
 
     //because everything pumps out of here a as a string.
-    public class GameContract
-    {
-        public string id { get; set; }
-
-        public string name { get; set; }
-
-        public string executableName { get; set; }
-
-        public string versionString { get; set; }
-
-        public string zipLength { get; set; }
-
-        public string ready { get; set; }
-
-        public string archived { get; set; }
-
-        public string uploadTimeStamp { get; set; }
-
-        public string idGroup { get; set; }
-    }
-
-    public class Game
-    {
-        public class HeaderGame : Game
-        {
-            public HeaderGame()
-                : base(null)
-            {
-            }
-
-
-            public override string ToString()
-            {
-                return "Version\tStatus\tName";
-            }
-        }
-
-        public static Game headerGame = new HeaderGame();
-
-        public string id;
-        public int versionInteger;
-        public string version;
-        public string name;
-        public string executableName;
-        public string displayName;
-        public int zipLength;
-        public bool ready;
-        public bool archived;
-        public string uploadTimeStamp;
-        public int idGroup;
-
-        private Game(GameContract contract)
-        {
-            if (contract != null)
-            {
-                id = contract.id;
-                versionInteger = Int32.Parse(contract.versionString);
-                name = contract.name;
-                executableName = contract.executableName;
-                ready = Boolean.Parse(contract.ready);
-                archived = Boolean.Parse(contract.archived);
-                zipLength = Int32.Parse(contract.zipLength);
-                displayName = name.Replace("&", "&&");
-                version = "" + versionInteger;
-                this.uploadTimeStamp = contract.uploadTimeStamp;
-                this.idGroup = Int32.Parse(contract.idGroup);
-            }
-        }
-
-        public static Game getGame(GameContract contract)
-        {
-            try
-            {
-                Game game = new Game(contract);
-                return game;
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
-        public override string ToString()
-        {
-            return versionInteger + "\t" + (archived ? "Archived" : (ready ? "Published" : "Corrupt")) + "\t" + name;
-        }
-
-    }
+    
 }

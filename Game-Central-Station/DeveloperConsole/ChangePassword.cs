@@ -26,7 +26,7 @@ namespace GameCentralStation.DeveloperConsole
         private void button1_Click(object sender, EventArgs e)
         {
             MySqlCommand command = new MySqlCommand("select * from accounts where username = \"" + Globals.userName + "\";");
-            command.Connection = Globals.connection;
+            command.Connection = DatabaseHelper.connection;
             MySqlDataReader reader = command.ExecuteReader();
             reader.Read();
             int passwordHash = Int32.Parse(reader["password"].ToString());
@@ -38,7 +38,7 @@ namespace GameCentralStation.DeveloperConsole
                 if(newpass1 == newpass2) {
 
                     command = new MySqlCommand("update accounts set password = " + newpass1 + " where username = \"" + Globals.userName + "\"");
-                    command.Connection = Globals.connection;
+                    command.Connection = DatabaseHelper.connection;
                     command.ExecuteNonQuery();
 
                     MessageBox.Show("successfully updated password!");

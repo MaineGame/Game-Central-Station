@@ -23,7 +23,7 @@ namespace GameCentralStation.DeveloperConsole
 
         private void Update_Load(object sender, EventArgs e)
         {
-            games = Globals.getGamesWhere("username = \"" + Globals.userName + "\" and archived = false and ready = true");
+            games = DatabaseHelper.getGamesWhere("username = \"" + Globals.userName + "\" and archived = false and ready = true");
             foreach (Game game in games)
                 comboBox1.Items.Add(game.displayName);
         }
@@ -44,7 +44,7 @@ namespace GameCentralStation.DeveloperConsole
 
             if (upload.success)
             {
-                Globals.deleteGame(game);
+                DatabaseHelper.deleteGame(game);
             }
 
         }

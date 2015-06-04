@@ -22,7 +22,7 @@ namespace GameCentralStation.DeveloperConsole
 
         private void Restore_Load(object sender, EventArgs e)
         {
-            games = Globals.getGamesWhere("username = \"" + Globals.userName + "\" and ready = true and archived = true");
+            games = DatabaseHelper.getGamesWhere("username = \"" + Globals.userName + "\" and ready = true and archived = true");
             listBox1.Items.Add(Game.headerGame);
             foreach (Game game in games)
                 listBox1.Items.Add(game.ToString());
@@ -36,7 +36,7 @@ namespace GameCentralStation.DeveloperConsole
 
                 string commandString = "update store set archived = true where idGroup = " + game.idGroup + "; update store set archived = false where gameID = " + game.id + ";";
                 MySqlCommand command = new MySqlCommand(commandString);
-                command.Connection = Globals.connection;
+                command.Connection = DatabaseHelper.connection;
                 command.ExecuteNonQuery();
 
                 MessageBox.Show("" + game.displayName + " sucessfully restored!");

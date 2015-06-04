@@ -39,7 +39,7 @@ namespace GameCentralStation.DeveloperConsole
         {
 
 
-            deleteSuccessful = Globals.deleteGame(game);
+            deleteSuccessful = DatabaseHelper.deleteGame(game);
             Close();
         }
     }

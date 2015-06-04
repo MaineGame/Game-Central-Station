@@ -23,7 +23,7 @@ namespace GameCentralStation.DeveloperConsole
             label1.Text = "You are logged in as: " + Globals.userName;
             label2.Text = "Password: ********";
 
-            games = Globals.getGamesWhere("username = '" + Globals.userName + "'");
+            games = DatabaseHelper.getGamesWhere("username = '" + Globals.userName + "'");
             listBox1.Items.Add(Game.headerGame.ToString());
             foreach (Game game in games)
                 listBox1.Items.Add(game.ToString());

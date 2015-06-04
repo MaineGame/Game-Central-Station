@@ -47,7 +47,7 @@ namespace GameCentralStation.DeveloperConsole
             try
             {
                 MySqlCommand command = new MySqlCommand("insert into accounts values(\"" + textBox1.Text.ToLower() + "\", " + pass1Hash + ");");
-                command.Connection = Globals.connection;
+                command.Connection = DatabaseHelper.connection;
                 command.ExecuteNonQuery();
             }catch(Exception ex) {
                 label5.Text = ex.Message;

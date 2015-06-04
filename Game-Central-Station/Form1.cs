@@ -23,13 +23,16 @@ namespace GameCentralStation
     {
 
         private Game[] storeGames = null;
+        private List<UninstalledGameCard> gameCardList = new List<UninstalledGameCard>();
         private Game[] libraryGames = null;
         private const int STORE = 0;
         private const int LIBRARY = 1;
-        private const int ABOUT = 2;
-        private const int STORE_HARD = 3;
-        private const int LIBRARY_HARD = 4;
+        private const int DOWNLOADS = 2;
+        private const int ABOUT = 3;
+        private const int STORE_HARD = -1;
+        private const int LIBRARY_HARD = -2;
         private int task = 0;
+        public static object storeLock = new object();
 
         private MaterialSkinManager manager = MaterialSkinManager.Instance;
 
@@ -43,6 +46,9 @@ namespace GameCentralStation
 
         private void Mist_Load(object sender, EventArgs e)
         {
+            panel = new FlowLayoutPanel();
+            panel.FlowDirection = FlowDirection.LeftToRight;
+            tabPage1.Controls.Add(panel);
             string version = File.ReadAllText("version.txt");
             try
             {
@@ -53,14 +59,14 @@ namespace GameCentralStation
                 label3.Text = "Version Parsing Error: " + ex.Message;
             }
             materialFlatButton1.ForeColor = Color.White;
-            BackColor = ((int)Primary.LightBlue700).ToColor();
+            BackColor = ((int)Primary.LightBlue800).ToColor();
             WindowState = FormWindowState.Normal;
             if (Globals.hasArg("-K"))
             {
                 WindowState = FormWindowState.Maximized;
                 Sizable = false;
             }
-            hardReloadStorePage();
+            runTask(STORE_HARD);
         }
 
         private static Image ScaleImage(Image image, int maxWidth, int maxHeight)
@@ -80,13 +86,13 @@ namespace GameCentralStation
         private void uninstall(Game game)
         {
             new Uninstall(game).ShowDialog();
-            hardReloadStorePage(); //TODO SAME
+            runTask(STORE_HARD); //TODO SAME
         }
 
         private void downloadGame(Game game)
         {
             new Download(game).ShowDialog();
-            hardReloadStorePage(); //TODO make CURRENT PAGE
+            runTask(STORE_HARD); //TODO make CURRENT PAGE
         }
 
         private void openGame(Game game)
@@ -104,9 +110,29 @@ namespace GameCentralStation
             }
         }
 
+        private FlowLayoutPanel panel = null;
+
+        //300 x 169
+
+        //major time comes from the downloading of images, so thats what needs to be optimized.
+        //done through background workers in cards.
         private void reloadStoreGamesList()
         {
-            storeGames = Globals.getGamesWhere("archived = false and ready = true");
+            storeGames = DatabaseHelper.getGamesWhere("archived = false and ready = true");
+        }
+
+        private void addGamesToStore()
+        {
+            foreach (Game game in storeGames)
+            {
+                UninstalledGameCard gameCard = new UninstalledGameCard();
+                gameCard.setGameID(Int32.Parse(game.id));
+                
+                
+                gameCardList.Add(gameCard);
+            }
+
+            Debug.log("DONE LOADING THINGS INTO PANEL");
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -115,54 +141,59 @@ namespace GameCentralStation
             switch (task)
             {
                 case STORE:
+                    {
+                        Debug.log("RELOADING STORE HARD");
+
+                        reloadStoreGamesList();
+                    }
                     break;
                 case LIBRARY:
                     break;
                 case STORE_HARD:
                     {
+                        Debug.log("RELOADING STORE HARD");
+
                         reloadStoreGamesList();
-
-
-
                     }
                     break;
 
             }
 
+            backgroundWorker1.ReportProgress(DONE);
+
         }
 
-        private void reloadStorePage()
+        //TODO use a NEW background worker everytime
+        private void runTask(int task)
         {
-            task = STORE;
+            this.task = task;
             backgroundWorker1.RunWorkerAsync();
         }
 
-        private void hardReloadStorePage()
-        {
-            task = STORE_HARD;
-            backgroundWorker1.RunWorkerAsync();
-        }
-
-        private void reloadLibraryPage()
-        {
-            task = LIBRARY;
-            backgroundWorker1.RunWorkerAsync();
-        }
-
-        private void hardReloadLibraryPage()
-        {
-            task = LIBRARY_HARD;
-            backgroundWorker1.RunWorkerAsync();
-        }
+        private const int DONE = -1;
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            //TODO stuff
+            //DONE?
+
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             //TODO stuff
+            switch (e.ProgressPercentage)
+            {
+                case DONE:
+                    lock (storeLock)
+                    {
+                        addGamesToStore();
+                        foreach (UninstalledGameCard card in gameCardList) panel.Controls.Add(card);
+                        tabPage1.Controls[0].Controls.Add(panel);
+                        Debug.log("DONE LOADING THINGS INTO PANEL");
+                    }
+                    break;
+            }
+
         }
 
         private void advance()
@@ -180,10 +211,10 @@ namespace GameCentralStation
 
         private void materialFlatButton1_Click(object sender, EventArgs e)
         {
-            
+
             new Login().ShowDialog();
             advance();
-            
+
         }
 
         private void materialLabel1_Click(object sender, EventArgs e)
@@ -193,7 +224,7 @@ namespace GameCentralStation
 
         private void materialTabControl1_Selected(object sender, TabControlEventArgs e)
         {
-            
+            runTask(e.TabPageIndex);
         }
     }
 }

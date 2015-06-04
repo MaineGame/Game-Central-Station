@@ -54,19 +54,19 @@ namespace GameCentralStation
             try
             {
                 Console.WriteLine("Connecting...");
-                Globals.connection = new MySqlConnection(
-                    "Server=" + Globals.RDSDOMAIN + ";" +
+                DatabaseHelper.connection = new MySqlConnection(
+                    "Server=" + DatabaseHelper.RDSDOMAIN + ";" +
                     "Database=mainegamesteam;" +
                     "Uid=mainegamesteam;" +
                     "Pwd=mainegamesteam1!;"
                     );
-                Globals.connection.Open();
+                DatabaseHelper.connection.Open();
                 Console.WriteLine("wuddup!");
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                Globals.connection = null;
+                DatabaseHelper.connection = null;
             }
         }
 
@@ -168,7 +168,7 @@ namespace GameCentralStation
             Debug.log("okay, so we're done that now, onto connecting...");
             backgroundWorker1.ReportProgress(CONNECTING);
             connect();
-            Debug.log("doneski, connection is" + ((Globals.connection == null) ? "" : " not") + " null");
+            Debug.log("doneski, connection is" + ((DatabaseHelper.connection == null) ? "" : " not") + " null");
             backgroundWorker1.ReportProgress(DONE);
 
         }

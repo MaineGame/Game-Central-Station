@@ -189,7 +189,7 @@ namespace GameCentralStation.DeveloperConsole
                 #region tell the rds database that hey, this game exists man!
 
                 MySqlCommand command = new MySqlCommand();
-                command.Connection = Globals.connection;
+                command.Connection = DatabaseHelper.connection;
 
                 //this thing man. tries to add the sql listing 999 times before it realizes there are no more game slots left. hopefully never going to happen?
                 //jk no do dat no more. probably horrible practice but eh.
@@ -295,7 +295,7 @@ namespace GameCentralStation.DeveloperConsole
 
                 //Le Toucan Has Departed
                 command = new MySqlCommand();
-                command.Connection = Globals.connection;
+                command.Connection = DatabaseHelper.connection;
                 command.CommandText = "UPDATE store SET ready = true WHERE gameID = " + gameID;
                 command.ExecuteNonQuery();
 
