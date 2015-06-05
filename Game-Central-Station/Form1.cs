@@ -32,23 +32,30 @@ namespace GameCentralStation
         private const int STORE_HARD = -1;
         private const int LIBRARY_HARD = -2;
         private int task = 0;
-        public static object storeLock = new object();
+        private BackgroundWorker backgroundWorker1;
 
         private MaterialSkinManager manager = MaterialSkinManager.Instance;
 
         public Mist()
         {
             Globals.root = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-
             InitializeComponent();
             manager.AddFormToManage(this);
         }
 
+        private void newBackgroundWorker()
+        {
+            backgroundWorker1 = new BackgroundWorker();
+            this.backgroundWorker1.WorkerReportsProgress = true;
+            this.backgroundWorker1.WorkerSupportsCancellation = true;
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+        }
+
         private void Mist_Load(object sender, EventArgs e)
         {
-            panel = new FlowLayoutPanel();
-            panel.FlowDirection = FlowDirection.LeftToRight;
-            tabPage1.Controls.Add(panel);
+            newBackgroundWorker();
             string version = File.ReadAllText("version.txt");
             try
             {
@@ -110,8 +117,6 @@ namespace GameCentralStation
             }
         }
 
-        private FlowLayoutPanel panel = null;
-
         //300 x 169
 
         //major time comes from the downloading of images, so thats what needs to be optimized.
@@ -123,12 +128,14 @@ namespace GameCentralStation
 
         private void addGamesToStore()
         {
+            gameCardList.Clear();
             foreach (Game game in storeGames)
             {
+                if (backgroundWorker1.CancellationPending) return;
                 UninstalledGameCard gameCard = new UninstalledGameCard();
-                gameCard.setGameID(Int32.Parse(game.id));
-                
-                
+                gameCard.setGame(game);
+
+
                 gameCardList.Add(gameCard);
             }
 
@@ -167,6 +174,8 @@ namespace GameCentralStation
         private void runTask(int task)
         {
             this.task = task;
+            if(backgroundWorker1.IsBusy) backgroundWorker1.CancelAsync();
+            newBackgroundWorker();
             backgroundWorker1.RunWorkerAsync();
         }
 
@@ -184,13 +193,10 @@ namespace GameCentralStation
             switch (e.ProgressPercentage)
             {
                 case DONE:
-                    lock (storeLock)
-                    {
-                        addGamesToStore();
-                        foreach (UninstalledGameCard card in gameCardList) panel.Controls.Add(card);
-                        tabPage1.Controls[0].Controls.Add(panel);
-                        Debug.log("DONE LOADING THINGS INTO PANEL");
-                    }
+                    addGamesToStore();
+                    flowLayoutPanel1.Controls.Clear();
+                    foreach (UninstalledGameCard card in gameCardList) flowLayoutPanel1.Controls.Add(card);
+                    Debug.log("DONE LOADING THINGS INTO PANEL");
                     break;
             }
 
@@ -224,6 +230,7 @@ namespace GameCentralStation
 
         private void materialTabControl1_Selected(object sender, TabControlEventArgs e)
         {
+            Debug.log("Selected...");
             runTask(e.TabPageIndex);
         }
     }

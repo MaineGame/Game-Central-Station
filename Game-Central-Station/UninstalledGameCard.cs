@@ -12,19 +12,20 @@ namespace GameCentralStation
 {
     public partial class UninstalledGameCard : UserControl
     {
-        private int gameID;
+        private Game game;
         private string name;
         private Image image;
+        private const int DONE = -1;
 
         public UninstalledGameCard()
         {
             InitializeComponent();
         }
 
-        public void setGameID(int i)
+        public void setGame(Game game)
         {
-            gameID = i;
-            //hardReload();
+            this.game = game;
+            hardReload();
         }
 
         private void UninstalledGameCard_Load(object sender, EventArgs e)
@@ -39,31 +40,32 @@ namespace GameCentralStation
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            lock (Mist.storeLock)
+            Debug.log("Loading for card");
+            name = game.displayName;
+            Debug.log("name on card: " + name);
+
+            try
             {
-                Game self = DatabaseHelper.getGamesWhere("gameID = " + gameID)[0];
-                name = self.displayName;
+                Image image = Image.FromStream(Globals.getFile("/games/" + game.id + "/default.jpg"));
+                image = ScaleImage(image, 300, 100);
+                this.image = image;
+            }
+            catch (Exception ex)
+            {
                 try
                 {
-                    Image image = Image.FromStream(Globals.getFile("/games/" + self.id + "/default.jpg"));
+                    System.Drawing.Image image = Image.FromStream(Globals.getFile("/games/" + game.id + "/default.png"));
                     image = ScaleImage(image, 300, 100);
                     this.image = image;
                 }
-                catch (Exception ex)
+                catch (Exception exc)
                 {
-                    try
-                    {
-                        System.Drawing.Image image = Image.FromStream(Globals.getFile("/games/" + self.id + "/default.png"));
-                        image = ScaleImage(image, 300, 100);
-                        this.image = image;
-                    }
-                    catch (Exception exc)
-                    {
-                        this.image = Image.FromStream(Globals.getFile("/games/default2.jpg"));
-                    }
+                    this.image = Image.FromStream(Globals.getFile("/games/default2.jpg"));
                 }
-
             }
+
+            backgroundWorker1.ReportProgress(DONE);
+
         }
 
         private static Image ScaleImage(Image image, int maxWidth, int maxHeight)
@@ -78,6 +80,20 @@ namespace GameCentralStation
             var newImage = new Bitmap(newWidth, newHeight);
             Graphics.FromImage(newImage).DrawImage(image, 0, 0, newWidth, newHeight);
             return newImage;
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (e.ProgressPercentage == DONE)
+            {
+                materialLabel1.Text = name;
+                pictureBox1.Image = image;
+            }
+        }
+
+        private void materialFlatButton1_Click(object sender, EventArgs e)
+        {
+            new Download(game).ShowDialog();
         }
     }
 }

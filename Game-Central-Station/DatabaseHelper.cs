@@ -18,7 +18,16 @@ namespace GameCentralStation
         {
             lock (connection)
             {
+                try
+                {
+                    connection.Open();
+                }
+                catch (Exception e)
+                {
 
+
+
+                }
                 Debug.log("" + connection.State);
 
                 //TODO if this ever ACTUALLY tries to open up a dialog, it will fail because
