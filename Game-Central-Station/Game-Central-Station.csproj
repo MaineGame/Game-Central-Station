@@ -95,17 +95,11 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="GameHelper.cs" />
-    <Compile Include="InstalledGameCard.cs">
+    <Compile Include="GameCard.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="InstalledGameCard.Designer.cs">
-      <DependentUpon>InstalledGameCard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UninstalledGameCard.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UninstalledGameCard.Designer.cs">
-      <DependentUpon>UninstalledGameCard.cs</DependentUpon>
+    <Compile Include="GameCard.Designer.cs">
+      <DependentUpon>GameCard.cs</DependentUpon>
     </Compile>
     <Compile Include="Globals.cs" />
     <Compile Include="Program.cs" />
@@ -125,11 +119,8 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InstalledGameCard.resx">
-      <DependentUpon>InstalledGameCard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UninstalledGameCard.resx">
-      <DependentUpon>UninstalledGameCard.cs</DependentUpon>
+    <EmbeddedResource Include="GameCard.resx">
+      <DependentUpon>GameCard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

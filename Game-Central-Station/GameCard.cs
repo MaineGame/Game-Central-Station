@@ -7,17 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace GameCentralStation
 {
-    public partial class InstalledGameCard : UserControl
+    public partial class GameCard : UserControl
     {
         private Game game;
         private string name;
         private Image image;
         private const int DONE = -1;
+        private bool installed;
 
-        public InstalledGameCard()
+        public GameCard()
         {
             InitializeComponent();
         }
@@ -64,6 +66,10 @@ namespace GameCentralStation
                 }
             }
 
+
+
+            installed = File.Exists(Globals.root + "\\games\\" + game.id + "\\" + game.executableName);
+
             backgroundWorker1.ReportProgress(DONE);
 
         }
@@ -88,22 +94,47 @@ namespace GameCentralStation
             {
                 materialLabel1.Text = name;
                 pictureBox1.Image = image;
+                if (installed)
+                {
+                    materialFlatButton2.Visible = false;
+                    materialFlatButton1.Visible = true;
+                    materialRaisedButton1.Visible = true;
+                }
+                else
+                {
+                    materialFlatButton1.Visible = false;
+                    materialRaisedButton1.Visible = false;
+                    materialFlatButton2.Visible = true;
+                }
             }
         }
 
         private void materialFlatButton1_Click(object sender, EventArgs e)
         {
-            new Download(game).ShowDialog();
+            new Uninstall(game).ShowDialog();
+            hardReload();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            new Download(game).ShowDialog();
+            if (!installed) new Download(game).ShowDialog();
+            else playGame();
+        }
+
+        private void playGame()
+        {
+            Globals.openGame(game);
         }
 
         private void materialRaisedButton1_Click(object sender, EventArgs e)
         {
+            playGame();
+        }
 
+        private void materialFlatButton2_Click(object sender, EventArgs e)
+        {
+            new Download(game).ShowDialog();
+            hardReload();
         }
     }
 }

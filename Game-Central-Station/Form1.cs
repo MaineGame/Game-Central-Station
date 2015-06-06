@@ -56,7 +56,7 @@ namespace GameCentralStation
         {
 
             newBackgroundWorker();
-            string version = File.ReadAllText("version.txt");
+            string version = File.ReadAllText(Globals.root + "\\version.txt");
             try
             {
                 label3.Text += (Int32.Parse(version.Substring(0, 2)) - 10) + "." + (Int32.Parse(version.Substring(2, 2))) + "." + (Int32.Parse(version.Substring(4, 2))) + " Revision " + (Int32.Parse(version.Substring(6, 2))) + ".";
@@ -101,21 +101,6 @@ namespace GameCentralStation
             runTask(STORE_HARD); //TODO make CURRENT PAGE
         }
 
-        private void openGame(Game game)
-        {
-            try
-            {
-                Process process = new Process();
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.FileName = Globals.root + "\\games\\" + game.id + "\\" + game.executableName;
-                process.Start();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
-
         //300 x 169
 
         //major time comes from the downloading of images, so thats what needs to be optimized.
@@ -131,29 +116,8 @@ namespace GameCentralStation
             foreach (Game game in storeGames)
             {
                 if (backgroundWorker1.CancellationPending) return;
-                Control gameCard = null;
-
-                bool installed = File.Exists(Globals.root + "\\games\\" + game.id + "\\" + game.executableName);
-
-                if (Downloads.hasGame(game))
-                {
-
-                }
-                else
-                {
-                    if (installed)
-                    {
-                        Debug.log("" + game.displayName + " loaded as installed card");
-                        gameCard = new InstalledGameCard();
-                        ((InstalledGameCard)gameCard).setGame(game);
-                    }
-                    else
-                    {
-                        Debug.log("" + game.displayName + " loaded as uninstalled card");
-                        gameCard = new UninstalledGameCard();
-                        ((UninstalledGameCard)gameCard).setGame(game);
-                    }
-                }
+                GameCard gameCard = new GameCard();
+                gameCard.setGame(game);
 
 
                 gameCardList.Add(gameCard);

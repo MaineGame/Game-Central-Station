@@ -1,6 +1,6 @@
 ﻿namespace GameCentralStation
 {
-    partial class InstalledGameCard
+    partial class GameCard
     {
         /// <summary> 
         /// Required designer variable.
@@ -34,6 +34,7 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.materialRaisedButton1 = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.materialFlatButton2 = new MaterialSkin.Controls.MaterialFlatButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -63,6 +64,7 @@
             this.materialFlatButton1.TabIndex = 2;
             this.materialFlatButton1.Text = "uninstall";
             this.materialFlatButton1.UseVisualStyleBackColor = true;
+            this.materialFlatButton1.Visible = false;
             this.materialFlatButton1.Click += new System.EventHandler(this.materialFlatButton1_Click);
             // 
             // materialLabel1
@@ -110,21 +112,41 @@
             this.materialRaisedButton1.TabIndex = 4;
             this.materialRaisedButton1.Text = "play";
             this.materialRaisedButton1.UseVisualStyleBackColor = true;
+            this.materialRaisedButton1.Visible = false;
             this.materialRaisedButton1.Click += new System.EventHandler(this.materialRaisedButton1_Click);
             // 
-            // InstalledGameCard
+            // materialFlatButton2
+            // 
+            this.materialFlatButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.materialFlatButton2.AutoSize = true;
+            this.materialFlatButton2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialFlatButton2.Depth = 0;
+            this.materialFlatButton2.Location = new System.Drawing.Point(227, 199);
+            this.materialFlatButton2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialFlatButton2.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialFlatButton2.Name = "materialFlatButton2";
+            this.materialFlatButton2.Primary = false;
+            this.materialFlatButton2.Size = new System.Drawing.Size(66, 36);
+            this.materialFlatButton2.TabIndex = 5;
+            this.materialFlatButton2.Text = "Install";
+            this.materialFlatButton2.UseVisualStyleBackColor = true;
+            this.materialFlatButton2.Visible = false;
+            this.materialFlatButton2.Click += new System.EventHandler(this.materialFlatButton2_Click);
+            // 
+            // GameCard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.materialFlatButton2);
             this.Controls.Add(this.materialRaisedButton1);
             this.Controls.Add(this.materialLabel1);
             this.Controls.Add(this.materialFlatButton1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "InstalledGameCard";
+            this.Name = "GameCard";
             this.Size = new System.Drawing.Size(298, 240);
             this.Load += new System.EventHandler(this.UninstalledGameCard_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -141,5 +163,6 @@
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private MaterialSkin.Controls.MaterialRaisedButton materialRaisedButton1;
+        private MaterialSkin.Controls.MaterialFlatButton materialFlatButton2;
     }
 }

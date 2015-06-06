@@ -36,7 +36,22 @@ namespace GameCentralStation
         public const string password = "";
         private static Random random = new Random();
         public static string userName = null;
-        
+
+        public static void openGame(Game game)
+        {
+            try
+            {
+                if (process != null) process.Kill();
+                process = new Process();
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.FileName = Globals.root + "\\games\\" + game.id + "\\" + game.executableName;
+                process.Start();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
 
         //cant be const because has to be set a runtime.
         //but please don't change it?

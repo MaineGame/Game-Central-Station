@@ -127,6 +127,7 @@ namespace GameCentralStation
 
                     Debug.log("There is a newer version of GCS available.\nPress okay to download it now.");
 
+
                     #region download the installer and reopen it
                     {
                         FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://" + ftpIP + "/GCSInstaller.exe");
@@ -150,6 +151,7 @@ namespace GameCentralStation
                     }
 
                     Process.Start(AssemblyDirectory + "\\GCSInstaller.exe");
+                    Application.Exit();
                     #endregion
                 }
 
