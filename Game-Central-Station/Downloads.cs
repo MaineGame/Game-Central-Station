@@ -12,6 +12,11 @@ namespace GameCentralStation
 
 
 
+
+        public static bool hasGame(Game game)
+        {
+            return false;
+        }
     }
 
     public class DownloadingGame {

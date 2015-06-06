@@ -15,7 +15,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using GameCentralStation.DeveloperConsole;
 
 namespace GameCentralStation
 {
@@ -23,7 +22,7 @@ namespace GameCentralStation
     {
 
         private Game[] storeGames = null;
-        private List<UninstalledGameCard> gameCardList = new List<UninstalledGameCard>();
+        private List<Control> gameCardList = new List<Control>();
         private Game[] libraryGames = null;
         private const int STORE = 0;
         private const int LIBRARY = 1;
@@ -55,6 +54,7 @@ namespace GameCentralStation
 
         private void Mist_Load(object sender, EventArgs e)
         {
+
             newBackgroundWorker();
             string version = File.ReadAllText("version.txt");
             try
@@ -65,7 +65,6 @@ namespace GameCentralStation
             {
                 label3.Text = "Version Parsing Error: " + ex.Message;
             }
-            materialFlatButton1.ForeColor = Color.White;
             BackColor = ((int)Primary.LightBlue800).ToColor();
             WindowState = FormWindowState.Normal;
             if (Globals.hasArg("-K"))
@@ -132,14 +131,35 @@ namespace GameCentralStation
             foreach (Game game in storeGames)
             {
                 if (backgroundWorker1.CancellationPending) return;
-                UninstalledGameCard gameCard = new UninstalledGameCard();
-                gameCard.setGame(game);
+                Control gameCard = null;
+
+                bool installed = File.Exists(Globals.root + "\\games\\" + game.id + "\\" + game.executableName);
+
+                if (Downloads.hasGame(game))
+                {
+
+                }
+                else
+                {
+                    if (installed)
+                    {
+                        Debug.log("" + game.displayName + " loaded as installed card");
+                        gameCard = new InstalledGameCard();
+                        ((InstalledGameCard)gameCard).setGame(game);
+                    }
+                    else
+                    {
+                        Debug.log("" + game.displayName + " loaded as uninstalled card");
+                        gameCard = new UninstalledGameCard();
+                        ((UninstalledGameCard)gameCard).setGame(game);
+                    }
+                }
 
 
                 gameCardList.Add(gameCard);
             }
 
-            Debug.log("DONE LOADING THINGS INTO PANEL");
+            Debug.log("Done creating cards");
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -195,31 +215,10 @@ namespace GameCentralStation
                 case DONE:
                     addGamesToStore();
                     flowLayoutPanel1.Controls.Clear();
-                    foreach (UninstalledGameCard card in gameCardList) flowLayoutPanel1.Controls.Add(card);
-                    Debug.log("DONE LOADING THINGS INTO PANEL");
+                    foreach (Control card in gameCardList) flowLayoutPanel1.Controls.Add(card);
+                    Debug.log("done loading in cards");
                     break;
             }
-
-        }
-
-        private void advance()
-        {
-            if (Globals.userName != null)
-            {
-                new DeveloperMenu().ShowDialog();
-            }
-            else
-            {
-                //yeah this means you cancelled, not you failed.
-                //failing is handled in the login window.
-            }
-        }
-
-        private void materialFlatButton1_Click(object sender, EventArgs e)
-        {
-
-            new Login().ShowDialog();
-            advance();
 
         }
 
@@ -232,6 +231,12 @@ namespace GameCentralStation
         {
             Debug.log("Selected...");
             runTask(e.TabPageIndex);
+        }
+
+        private void Mist_KeyUp(object sender, KeyEventArgs e)
+        {
+            
+
         }
     }
 }

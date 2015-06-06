@@ -1,4 +1,4 @@
-﻿namespace GameCentralStation.DeveloperConsole
+﻿namespace DeveloperConsole
 {
     partial class Upload
     {

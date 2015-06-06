@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GameCentralStation
+namespace DeveloperConsole
 {
     class DatabaseHelper
     {
