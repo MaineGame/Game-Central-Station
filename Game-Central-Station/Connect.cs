@@ -120,12 +120,11 @@ namespace GameCentralStation
 
                 #endregion
 
-                Debug.log("LOCAL: " + localVersion + "\nFTP: " + ftpVersion);
 
                 if (ftpVersion > localVersion)
                 {
 
-                    Debug.log("There is a newer version of GCS available.\nPress okay to download it now.");
+                    MessageBox.Show("There is a newer version of GCS available.\nPress okay to download it now.");
 
 
                     #region download the installer and reopen it
@@ -167,18 +166,14 @@ namespace GameCentralStation
         {
             backgroundWorker1.ReportProgress(CHECKING_UPDATES);
             checkUpdates();
-            Debug.log("okay, so we're done that now, onto connecting...");
             backgroundWorker1.ReportProgress(CONNECTING);
             connect();
-            Debug.log("doneski, connection is" + ((DatabaseHelper.connection == null) ? "" : " not") + " null");
             backgroundWorker1.ReportProgress(DONE);
 
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            Debug.log("" + e.ProgressPercentage);
-
             switch (e.ProgressPercentage)
             {
                 case DONE:

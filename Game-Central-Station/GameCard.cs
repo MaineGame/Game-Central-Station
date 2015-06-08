@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Net;
+using System.IO.Compression;
 
 namespace GameCentralStation
 {
@@ -17,7 +19,10 @@ namespace GameCentralStation
         private string name;
         private Image image;
         private const int DONE = -1;
+        private const int STATE_CONNECTING = -2;
+        private const int STATE_EXTRACTING = -3;
         private bool installed;
+        private bool downloading;
 
         public GameCard()
         {
@@ -32,7 +37,8 @@ namespace GameCentralStation
 
         private void UninstalledGameCard_Load(object sender, EventArgs e)
         {
-
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = game.zipLength;
         }
 
         public void hardReload()
@@ -42,36 +48,44 @@ namespace GameCentralStation
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            Debug.log("Loading for card");
-            name = game.displayName;
-            Debug.log("name on card: " + name);
 
-            try
-            {
-                Image image = Image.FromStream(Globals.getFile("/games/" + game.id + "/default.jpg"));
-                image = ScaleImage(image, 300, 100);
-                this.image = image;
-            }
-            catch (Exception ex)
-            {
+                name = game.displayName;
+
                 try
                 {
-                    System.Drawing.Image image = Image.FromStream(Globals.getFile("/games/" + game.id + "/default.png"));
+                    Image image = Image.FromStream(Globals.getFile("/games/" + game.id + "/default.jpg"));
                     image = ScaleImage(image, 300, 100);
                     this.image = image;
                 }
-                catch (Exception exc)
+                catch (Exception ex)
                 {
-                    this.image = Image.FromStream(Globals.getFile("/games/default2.jpg"));
+                    try
+                    {
+                        System.Drawing.Image image = Image.FromStream(Globals.getFile("/games/" + game.id + "/default.png"));
+                        image = ScaleImage(image, 300, 100);
+                        this.image = image;
+                    }
+                    catch (Exception exc)
+                    {
+                        this.image = Image.FromStream(Globals.getFile("/games/default2.jpg"));
+                    }
                 }
+
+
+
+            if (!downloading)
+            {
+                //only thing dependant in downloading or not is snagging the downloaded state.
+                installed = File.Exists(Globals.root + "\\games\\" + game.id + "\\" + game.executableName);
+            }
+            else
+            {
+                //just roll with false, even though it doesn't matter to use
+                //downloading supercedes installed when reloading.
+                installed = false;
             }
 
-
-
-            installed = File.Exists(Globals.root + "\\games\\" + game.id + "\\" + game.executableName);
-
             backgroundWorker1.ReportProgress(DONE);
-
         }
 
         private static Image ScaleImage(Image image, int maxWidth, int maxHeight)
@@ -92,19 +106,31 @@ namespace GameCentralStation
         {
             if (e.ProgressPercentage == DONE)
             {
-                materialLabel1.Text = name;
                 pictureBox1.Image = image;
-                if (installed)
+                //remember kids, only render the buttons if we are not downloading presently...
+                if (!downloading)
                 {
-                    materialFlatButton2.Visible = false;
-                    materialFlatButton1.Visible = true;
-                    materialRaisedButton1.Visible = true;
+
+                    materialLabel1.Text = name;
+                    if (installed)
+                    {
+                        materialFlatButton2.Visible = false;
+                        materialFlatButton1.Visible = true;
+                        materialRaisedButton1.Visible = true;
+                    }
+                    else
+                    {
+                        materialFlatButton1.Visible = false;
+                        materialRaisedButton1.Visible = false;
+                        materialFlatButton2.Visible = true;
+                    }
                 }
                 else
                 {
                     materialFlatButton1.Visible = false;
                     materialRaisedButton1.Visible = false;
-                    materialFlatButton2.Visible = true;
+                    materialFlatButton2.Visible = false;
+                    //we're downloading... the other worker takes care of this one brosef.
                 }
             }
         }
@@ -133,8 +159,100 @@ namespace GameCentralStation
 
         private void materialFlatButton2_Click(object sender, EventArgs e)
         {
-            new Download(game).ShowDialog();
+            downloadWorker.RunWorkerAsync();
+
             hardReload();
         }
+
+        private void downloadWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            downloading = true;
+            download();
+            downloadWorker.ReportProgress(DONE);
+        }
+
+        private void download()
+        {
+            #region download and extracting the game data files
+
+            //tell the ui we're trying to connect...
+            downloadWorker.ReportProgress(STATE_CONNECTING);
+
+            //establish a new webclient because downloading is a thing.
+            WebClient client = new WebClient();
+
+            //give the downloader a progress listener. doesn't yell at the ui as much as you think, but nonetheless,
+            //it doesn't bother the ui thread, only raises flags for it. so the ui thread only actally recives the update
+            //as much as it refreshes itself.
+            client.DownloadProgressChanged += delegate(object Object, DownloadProgressChangedEventArgs downloadProgressChangedEventArgs)
+            {
+                //we send it the number of bytes we done got so far
+                if (downloadWorker.IsBusy) downloadWorker.ReportProgress((int)(downloadProgressChangedEventArgs.BytesReceived));
+
+            };
+
+            Directory.CreateDirectory(Globals.root + "\\games");
+            Directory.CreateDirectory(Globals.root + "\\games\\" + game.id);
+
+            if (Directory.Exists(Globals.root + "\\games\\" + game.id))
+                //delete the old if you have one
+                Directory.Delete(Globals.root + "\\games\\" + game.id, true);
+
+            Directory.CreateDirectory(Globals.root + "\\games\\" + game.id);
+
+            //download it
+            try
+            {
+                client.Credentials = new NetworkCredential(Globals.FTPUser, Globals.password);
+                client.DownloadFileTaskAsync(new Uri("ftp://" + Globals.FTPIP + "/games/" + game.id + "/current.zip"), "" + Globals.root + "\\games\\" + game.id + "\\temp.zip").Wait();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            //okay, we good downloading, tell the ui we're extracting now
+            downloadWorker.ReportProgress(STATE_EXTRACTING);
+
+
+            //then you know, actually start that bit...
+            ZipFile.ExtractToDirectory(Globals.root + "\\games\\" + game.id + "\\temp.zip", Globals.root + "\\games\\" + game.id);
+            //File.Delete(Globals.root + "\\games\\temp.zip");
+
+            #endregion
+        }
+
+        private void downloadWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (e.ProgressPercentage == DONE)
+            {
+                Debug.log("Done installing game?");
+                downloading = false;
+                progressBar1.Visible = false;
+                hardReload();
+            }
+            else if (e.ProgressPercentage == STATE_CONNECTING)
+            {
+                progressBar1.Style = ProgressBarStyle.Continuous;
+                progressBar1.Visible = true;
+                materialLabel1.Text = "Downloading " + game.displayName + "...";
+                materialFlatButton1.Visible = false;
+                materialRaisedButton1.Visible = false;
+                materialFlatButton2.Visible = false;
+
+            }
+            else if (e.ProgressPercentage == STATE_EXTRACTING)
+            {
+                progressBar1.Style = ProgressBarStyle.Marquee;
+                materialLabel1.Text = "Installing " + game.displayName + "...";
+                progressBar1.MarqueeAnimationSpeed = 20;
+            }
+            else
+            {
+                progressBar1.Value = e.ProgressPercentage;
+            }
+        }
+
+
     }
 }
