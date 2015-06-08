@@ -21,8 +21,10 @@ namespace GameCentralStation
                 if(connection.State != System.Data.ConnectionState.Open) connection.Open();
                 Debug.log("" + connection.State);
 
-                //TODO if this ever ACTUALLY tries to open up a dialog, it will fail because
+                //if this ever ACTUALLY tries to open up a dialog, it will fail because
                 //materialskin and cross threadin even nastier than winforms cross threading.
+                //yeah, that was fixed. i just assume the database works now. and if it doesn't,
+                //yell out why. at the developer.
 
                 List<Game> games = new List<Game>();
                 MySqlCommand command = new MySqlCommand();
