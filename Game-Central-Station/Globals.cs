@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -19,7 +20,7 @@ namespace GameCentralStation
         public static void log(string stuff)
         {
 #if DEBUG
-            MessageBox.Show (stuff);
+            MessageBox.Show(stuff);
 #endif
         }
 
@@ -31,6 +32,12 @@ namespace GameCentralStation
 
     public class Globals
     {
+
+        static Globals()
+        {
+            Globals.root = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+        }
+
         public const string FTPIP = "169.244.195.143";
         public const string FTPUser = "GCSUser";
         public const string password = "";
@@ -99,7 +106,7 @@ namespace GameCentralStation
         }
 
 
-        
+
 
         private static Image controller = null;
 
@@ -118,8 +125,10 @@ namespace GameCentralStation
             double g = random.NextDouble() / 2 + .5;
             double b = random.NextDouble() / 2 + .5;
 
-            for(int y = 0; y < 100; y ++) {
-                for(int x = 0; x < 300; x ++) {
+            for (int y = 0; y < 100; y++)
+            {
+                for (int x = 0; x < 300; x++)
+                {
 
                     //snag the color in
                     Color colorIn = controller.GetPixel(x, y);
@@ -139,7 +148,7 @@ namespace GameCentralStation
                     //color out and set new pixel
                     Color colorOut = Color.FromArgb((255 << 24) | (Rout << 16) | (Gout << 8) | (Bout));
                     controller.SetPixel(x, y, colorOut);
-                    
+
                 }
 
             }
@@ -147,8 +156,83 @@ namespace GameCentralStation
 
             return controller;
         }
+
+        public static void loadArgs()
+        {
+
+            string[] args = File.ReadAllLines("config");
+
+            Globals.args = args;
+
+            kioskMode = args.Contains<string>("-K");
+            if (kioskMode) Debug.log("Kiosk Mode enabled.");
+
+        }
+
+        public static bool
+            kioskMode { get; set; }
+
+        internal static void updateAll()
+        {
+            string[] games = Directory.GetDirectories("" + Globals.root + "\\games\\");
+            foreach (string file in games)
+            {
+                
+                string id = file.Substring(file.LastIndexOf('\\') + 1);
+
+                Game game = DatabaseHelper.getGamesWhere("gameID = " + id)[0];
+                string groupID = "" + game.idGroup;
+
+                Game newGame = DatabaseHelper.getGamesWhere("idGroup = " + groupID + " and archived = false and ready = true")[0];
+
+                if (game.id != newGame.id)
+                {
+                    Debug.log("Found update for " + game.displayName);
+                    //TODO MAKE THIS SHIT MORE MODULAR. UGH.
+
+                    #region nasty download
+
+                    #region download and extracting the game data files
+
+                    //establish a new webclient because downloading is a thing.
+                    WebClient client = new WebClient();
+
+                    Directory.CreateDirectory(Globals.root + "\\games");
+                    Directory.CreateDirectory(Globals.root + "\\games\\" + newGame.id);
+
+                    if (Directory.Exists(Globals.root + "\\games\\" + newGame.id))
+                        //delete the old if you have one
+                        Directory.Delete(Globals.root + "\\games\\" + newGame.id, true);
+
+                    //download it
+                    try
+                    {
+                        client.Credentials = new NetworkCredential(Globals.FTPUser, Globals.password);
+                        client.DownloadFileTaskAsync(new Uri("ftp://" + Globals.FTPIP + "/games/" + newGame.id + "/current.zip"), "" + Globals.root + "\\games\\temp.zip").Wait();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+
+                    //then you know, actually start that bit...
+                    ZipFile.ExtractToDirectory(Globals.root + "\\games\\temp.zip", Globals.root + "\\games\\" + newGame.id);
+                    //File.Delete(Globals.root + "\\games\\temp.zip");
+
+                    //houston, we're done here.
+                    #endregion
+
+                    #endregion
+
+                }
+
+            }
+
+        }
     }
 
     //because everything pumps out of here a as a string.
-    
+
 }

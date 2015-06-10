@@ -36,15 +36,25 @@ namespace GCSInstaller
 
         private void Menu_Load(object sender, EventArgs e)
         {
-            checkBox1.Checked = true;
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "GCSInstaller.license.txt";
-
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
+            if (Program.auto)
             {
-                string result = reader.ReadToEnd();
-                richTextBox1.Text = result;
+                tabControl1.SelectedIndex = 2;
+                backgroundWorker1.RunWorkerAsync();
+                button5.Enabled = false;
+                button6.Enabled = false;
+            }
+            else
+            {
+                checkBox1.Checked = true;
+                var assembly = Assembly.GetExecutingAssembly();
+                var resourceName = "GCSInstaller.license.txt";
+
+                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    string result = reader.ReadToEnd();
+                    richTextBox1.Text = result;
+                }
             }
         }
 
@@ -92,6 +102,8 @@ namespace GCSInstaller
             backgroundWorker1.ReportProgress(3);
             copyResource("GCSInstaller.InstallerContent.version.txt", installDir + "\\version.txt");
             backgroundWorker1.ReportProgress(4);
+
+            //TODO add config thing
 
             {
                 string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
@@ -153,6 +165,12 @@ namespace GCSInstaller
                 button5.Enabled = true;
                 button5.Text = "Finished";
                 label5.Text = "Installation Complete!";
+                if (Program.auto)
+                {
+                    Close();
+                    if (checkBox1.Checked)
+                        System.Diagnostics.Process.Start(installDir + "\\Game-Central-Station.exe", "-K");
+                }
             }
             else if (e.ProgressPercentage == UPDATE_NAME)
             {

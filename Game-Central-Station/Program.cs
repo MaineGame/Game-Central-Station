@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Web.Script.Serialization;
 using System.Collections;
+using System.IO.Compression;
 
 namespace GameCentralStation
 {
@@ -22,7 +23,7 @@ namespace GameCentralStation
         {
             try
             {
-                Globals.args = args;
+                Globals.loadArgs();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 var materialSkinManager = MaterialSkinManager.Instance;
@@ -46,6 +47,7 @@ namespace GameCentralStation
 
         private static void reportError(Exception e)
         {
+#if !DEBUG
             //started outside so can be used in catch.
             string str = "";
             try
@@ -81,6 +83,14 @@ namespace GameCentralStation
                 //just log this somewhere.
                 //TODO
             }
+
+            
+#else
+
+            Debug.log("" + e.Message);
+
+#endif
+
         }
 
     }

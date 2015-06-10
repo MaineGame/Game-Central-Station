@@ -50,7 +50,7 @@ namespace GameCentralStation
             backgroundWorker1.RunWorkerAsync();
         }
 
-        private void connect() {
+        private void connectToDatabase() {
             try
             {
                 Console.WriteLine("Connecting...");
@@ -124,7 +124,8 @@ namespace GameCentralStation
                 if (ftpVersion > localVersion)
                 {
 
-                    MessageBox.Show("There is a newer version of GCS available.\nPress okay to download it now.");
+                    if(!Globals.kioskMode)
+                        MessageBox.Show("There is a newer version of GCS available.\nPress okay to download it now.");
 
 
                     #region download the installer and reopen it
@@ -149,7 +150,7 @@ namespace GameCentralStation
                         fileStream.Close();
                     }
 
-                    Process.Start(AssemblyDirectory + "\\GCSInstaller.exe");
+                    Process.Start(AssemblyDirectory + "\\GCSInstaller.exe", "-auto");
                     Application.Exit();
                     #endregion
                 }
@@ -167,7 +168,11 @@ namespace GameCentralStation
             backgroundWorker1.ReportProgress(CHECKING_UPDATES);
             checkUpdates();
             backgroundWorker1.ReportProgress(CONNECTING);
-            connect();
+            connectToDatabase();
+
+            if (Globals.kioskMode)
+                Globals.updateAll();
+
             backgroundWorker1.ReportProgress(DONE);
 
         }

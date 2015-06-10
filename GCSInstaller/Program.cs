@@ -9,9 +9,12 @@ namespace GCSInstaller
 {
     class Program
     {
+        public static bool auto = false;
+
         [STAThread]
         static void Main(string[] args)
         {
+            if (args.Contains<string>("-auto")) auto = true;
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
