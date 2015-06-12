@@ -19,7 +19,6 @@ namespace GameCentralStation
             lock (connection)
             {
                 if(connection.State != System.Data.ConnectionState.Open) connection.Open();
-                Debug.log("" + connection.State);
 
                 //if this ever ACTUALLY tries to open up a dialog, it will fail because
                 //materialskin and cross threadin even nastier than winforms cross threading.

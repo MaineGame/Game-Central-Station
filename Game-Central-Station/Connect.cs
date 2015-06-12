@@ -150,7 +150,12 @@ namespace GameCentralStation
                         fileStream.Close();
                     }
 
-                    Process.Start(AssemblyDirectory + "\\GCSInstaller.exe", "-auto");
+                    //kiosk mode does auto yo.
+                    if (Globals.kioskMode)
+                        Process.Start(AssemblyDirectory + "\\GCSInstaller.exe", "-auto");
+                    else Process.Start(AssemblyDirectory + "\\GCSInstaller.exe");
+
+
                     Application.Exit();
                     #endregion
                 }

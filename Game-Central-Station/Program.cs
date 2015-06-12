@@ -86,9 +86,7 @@ namespace GameCentralStation
 
             
 #else
-
             Debug.log("" + e.Message);
-
 #endif
 
         }

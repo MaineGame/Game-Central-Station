@@ -49,7 +49,13 @@ namespace GameCentralStation
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
 
-                name = game.displayName;
+                name =
+
+
+#if DEBUG
+ game.id + " " +
+#endif
+                    game.displayName;
 
                 try
                 {
@@ -235,7 +241,11 @@ namespace GameCentralStation
             {
                 progressBar1.Style = ProgressBarStyle.Continuous;
                 progressBar1.Visible = true;
-                materialLabel1.Text = "Downloading " + game.displayName + "...";
+                materialLabel1.Text = "Downloading " + 
+#if DEBUG
+                    game.id + " " + 
+#endif
+                    game.displayName + "...";
                 materialFlatButton1.Visible = false;
                 materialRaisedButton1.Visible = false;
                 materialFlatButton2.Visible = false;
@@ -244,7 +254,12 @@ namespace GameCentralStation
             else if (e.ProgressPercentage == STATE_EXTRACTING)
             {
                 progressBar1.Style = ProgressBarStyle.Marquee;
-                materialLabel1.Text = "Installing " + game.displayName + "...";
+                materialLabel1.Text = "Installing " + game.displayName +
+
+#if DEBUG
+ game.id + " " +
+#endif
+                    "...";
                 progressBar1.MarqueeAnimationSpeed = 20;
             }
             else

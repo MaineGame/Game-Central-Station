@@ -36,6 +36,10 @@ namespace GCSInstaller
 
         private void Menu_Load(object sender, EventArgs e)
         {
+            if (File.Exists(installDir + "\\config"))
+            {
+                checkBox2.Visible = false;
+            }
             if (Program.auto)
             {
                 tabControl1.SelectedIndex = 2;
@@ -78,6 +82,10 @@ namespace GCSInstaller
             }
             else
             {
+                //TODO later modularize this maybe?
+                //id we ever need more options than kiosk mode...
+                if (checkBox2.Checked)
+                    File.WriteAllLines(installDir + "\\config", new string[] { "-K" });
 
                 Close();
                 if(checkBox1.Checked)
@@ -168,8 +176,7 @@ namespace GCSInstaller
                 if (Program.auto)
                 {
                     Close();
-                    if (checkBox1.Checked)
-                        System.Diagnostics.Process.Start(installDir + "\\Game-Central-Station.exe", "-K");
+                    System.Diagnostics.Process.Start(installDir + "\\Game-Central-Station.exe", "-K");
                 }
             }
             else if (e.ProgressPercentage == UPDATE_NAME)

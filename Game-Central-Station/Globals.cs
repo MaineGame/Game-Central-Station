@@ -160,7 +160,7 @@ namespace GameCentralStation
         public static void loadArgs()
         {
 
-            string[] args = File.ReadAllLines("config");
+            string[] args = File.ReadAllLines(root + "\\config");
 
             Globals.args = args;
 
@@ -174,62 +174,66 @@ namespace GameCentralStation
 
         internal static void updateAll()
         {
-            string[] games = Directory.GetDirectories("" + Globals.root + "\\games\\");
-            foreach (string file in games)
+            if (Directory.Exists("" + Globals.root + "\\games\\"))
             {
-                
-                string id = file.Substring(file.LastIndexOf('\\') + 1);
-
-                Game game = DatabaseHelper.getGamesWhere("gameID = " + id)[0];
-                string groupID = "" + game.idGroup;
-
-                Game newGame = DatabaseHelper.getGamesWhere("idGroup = " + groupID + " and archived = false and ready = true")[0];
-
-                if (game.id != newGame.id)
+                string[] games = Directory.GetDirectories("" + Globals.root + "\\games\\");
+                foreach (string file in games)
                 {
-                    Debug.log("Found update for " + game.displayName);
-                    //TODO MAKE THIS SHIT MORE MODULAR. UGH.
 
-                    #region nasty download
+                    string id = file.Substring(file.LastIndexOf('\\') + 1);
 
-                    #region download and extracting the game data files
+                    Game game = DatabaseHelper.getGamesWhere("gameID = " + id)[0];
+                    string groupID = "" + game.idGroup;
 
-                    //establish a new webclient because downloading is a thing.
-                    WebClient client = new WebClient();
+                    Game newGame = DatabaseHelper.getGamesWhere("idGroup = " + groupID + " and archived = false and ready = true")[0];
 
-                    Directory.CreateDirectory(Globals.root + "\\games");
-                    Directory.CreateDirectory(Globals.root + "\\games\\" + newGame.id);
-
-                    if (Directory.Exists(Globals.root + "\\games\\" + newGame.id))
-                        //delete the old if you have one
-                        Directory.Delete(Globals.root + "\\games\\" + newGame.id, true);
-
-                    //download it
-                    try
+                    if (game.id != newGame.id)
                     {
-                        client.Credentials = new NetworkCredential(Globals.FTPUser, Globals.password);
-                        client.DownloadFileTaskAsync(new Uri("ftp://" + Globals.FTPIP + "/games/" + newGame.id + "/current.zip"), "" + Globals.root + "\\games\\temp.zip").Wait();
+                        Debug.log("Found update for " + game.displayName);
+                        //TODO MAKE THIS SHIT MORE MODULAR. UGH.
+
+                        #region nasty download
+
+                        #region download and extracting the game data files
+
+                        //establish a new webclient because downloading is a thing.
+                        WebClient client = new WebClient();
+
+                        Directory.CreateDirectory(Globals.root + "\\games");
+                        Directory.CreateDirectory(Globals.root + "\\games\\" + newGame.id);
+
+                        if (Directory.Exists(Globals.root + "\\games\\" + newGame.id))
+                            //delete the old if you have one
+                            Directory.Delete(Globals.root + "\\games\\" + newGame.id, true);
+
+                        //download it
+                        try
+                        {
+                            client.Credentials = new NetworkCredential(Globals.FTPUser, Globals.password);
+                            client.DownloadFileTaskAsync(new Uri("ftp://" + Globals.FTPIP + "/games/" + newGame.id + "/current.zip"), "" + Globals.root + "\\games\\temp.zip").Wait();
+
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+
+
+                        //then you know, actually start that bit...
+                        ZipFile.ExtractToDirectory(Globals.root + "\\games\\temp.zip", Globals.root + "\\games\\" + newGame.id);
+                        //File.Delete(Globals.root + "\\games\\temp.zip");
+
+                        //houston, we're done here.
+                        #endregion
+
+                        Directory.Delete(Globals.root + "\\games\\" + game.id, true);
+
+                        #endregion
 
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-
-
-                    //then you know, actually start that bit...
-                    ZipFile.ExtractToDirectory(Globals.root + "\\games\\temp.zip", Globals.root + "\\games\\" + newGame.id);
-                    //File.Delete(Globals.root + "\\games\\temp.zip");
-
-                    //houston, we're done here.
-                    #endregion
-
-                    #endregion
 
                 }
-
             }
-
         }
     }
 
