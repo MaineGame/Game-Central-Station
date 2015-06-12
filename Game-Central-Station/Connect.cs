@@ -60,22 +60,6 @@ namespace GameCentralStation
             backgroundWorker1.RunWorkerAsync();
         }
 
-        private bool sanityCheck()
-        {
-            try
-            {
-                using (var client = new WebClient())
-                using (var stream = client.OpenRead("http://www.google.com"))
-                {
-                    return true;
-                }
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
         private void connectToDatabase() {
             try
             {
@@ -203,6 +187,7 @@ namespace GameCentralStation
                 checkGcsUpdates();
                 backgroundWorker1.ReportProgress(CONNECTING);
                 connectToDatabase();
+                Globals.offline &= (DatabaseHelper.connection != null && DatabaseHelper.connection.State == System.Data.ConnectionState.Open);
 
                 if (Globals.kioskMode)
                     Globals.updateAll();

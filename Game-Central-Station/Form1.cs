@@ -21,15 +21,12 @@ namespace GameCentralStation
     public partial class Mist : MaterialForm
     {
 
-        private Game[] storeGames = null;
+        private Game[] displayGames = null;
         private List<Control> gameCardList = new List<Control>();
-        private Game[] libraryGames = null;
         private const int STORE = 0;
         private const int LIBRARY = 1;
         private const int DOWNLOADS = 2;
         private const int ABOUT = 3;
-        private const int STORE_HARD = -1;
-        private const int LIBRARY_HARD = -2;
         private int task = 0;
         private BackgroundWorker backgroundWorker1;
 
@@ -37,8 +34,10 @@ namespace GameCentralStation
 
         public Mist()
         {
+            
             Globals.root = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             InitializeComponent();
+            
             manager.AddFormToManage(this);
         }
 
@@ -60,8 +59,10 @@ namespace GameCentralStation
                 Text += " [Kiosk Mode]";
 #endif
 
+
             if (Globals.kioskMode)
             {
+
                 materialTabControl1.Height += materialTabSelector1.Height;
                 var location = materialTabControl1.Location;
                 location.Y -= materialTabSelector1.Height;
@@ -69,9 +70,17 @@ namespace GameCentralStation
                 materialTabSelector1.Visible = false;
                 materialTabSelector1.Enabled = false;
 
+
             }
 
             newBackgroundWorker();
+            if (Globals.offline)
+            {
+                Text += " [Offline Mode]";
+                
+                //Y THIS NO WORK
+                materialTabControl1.SelectedIndex = 1;
+            }
             string version = File.ReadAllText(Globals.root + "\\version.txt");
             try
             {
@@ -88,7 +97,7 @@ namespace GameCentralStation
                 WindowState = FormWindowState.Maximized;
                 Sizable = false;
             }
-            runTask(STORE_HARD);
+            runTask(STORE);
         }
 
         private static Image ScaleImage(Image image, int maxWidth, int maxHeight)
@@ -108,13 +117,13 @@ namespace GameCentralStation
         private void uninstall(Game game)
         {
             new Uninstall(game).ShowDialog();
-            runTask(STORE_HARD); //TODO SAME
+            runTask(STORE); //TODO SAME
         }
 
         private void downloadGame(Game game)
         {
             new Download(game).ShowDialog();
-            runTask(STORE_HARD); //TODO make CURRENT PAGE
+            runTask(STORE); //TODO make CURRENT PAGE
         }
 
         //300 x 169
@@ -123,13 +132,15 @@ namespace GameCentralStation
         //done through background workers in cards.
         private void reloadStoreGamesList()
         {
-            storeGames = DatabaseHelper.getGamesWhere("archived = false and ready = true");
+            if (Globals.offline) return;
+            displayGames = DatabaseHelper.getGamesWhere("archived = false and ready = true");
         }
 
-        private void addGamesToStore()
+        private void createGameCards()
         {
             gameCardList.Clear();
-            foreach (Game game in storeGames)
+            if (displayGames == null) return;
+            foreach (Game game in displayGames)
             {
                 if (backgroundWorker1.CancellationPending) return;
                 GameCard gameCard = new GameCard();
@@ -138,6 +149,8 @@ namespace GameCentralStation
 
                 gameCardList.Add(gameCard);
             }
+
+
 
             //Debug.log("Done creating cards");
         }
@@ -149,24 +162,52 @@ namespace GameCentralStation
             {
                 case STORE:
                     {
-                        //ebug.log("RELOADING STORE HARD");
+                        Debug.log("RELOADING STORE");
 
                         reloadStoreGamesList();
+                        backgroundWorker1.ReportProgress(DONE_STORE);
                     }
                     break;
                 case LIBRARY:
-                    break;
-                case STORE_HARD:
                     {
-                        //Debug.log("RELOADING STORE HARD");
+                        Debug.log("RELOADING Library");
 
-                        reloadStoreGamesList();
+                        reloadLocalGamesList();
+
+                        backgroundWorker1.ReportProgress(DONE_LOCAL);
                     }
                     break;
 
             }
 
-            backgroundWorker1.ReportProgress(DONE);
+
+        }
+
+        private void reloadLocalGamesList()
+        {
+
+            gameCardList.Clear();
+
+            List<Game> games = new List<Game>();
+
+            #region COPIED CODE N STUFF FROM GLOBALS LAWL BYE NOW ~now edited!
+
+            if (Directory.Exists("" + Globals.root + "\\games\\"))
+            {
+                string[] gamePaths = Directory.GetDirectories("" + Globals.root + "\\games\\");
+                foreach (string directory in gamePaths)
+                {
+
+                    Game game = Game.getGame(directory);
+                    if(game != null)
+                        games.Add(game);
+
+                }
+            }
+
+            #endregion
+
+            displayGames = games.ToArray<Game>();
 
         }
 
@@ -174,12 +215,13 @@ namespace GameCentralStation
         private void runTask(int task)
         {
             this.task = task;
-            if(backgroundWorker1.IsBusy) backgroundWorker1.CancelAsync();
+            if (backgroundWorker1.IsBusy) backgroundWorker1.CancelAsync();
             newBackgroundWorker();
             backgroundWorker1.RunWorkerAsync();
         }
 
-        private const int DONE = -1;
+        private const int DONE_STORE = -1;
+        private const int DONE_LOCAL = -2;
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -192,10 +234,16 @@ namespace GameCentralStation
             //TODO stuff
             switch (e.ProgressPercentage)
             {
-                case DONE:
-                    addGamesToStore();
+                case DONE_STORE:
+                    createGameCards();
                     flowLayoutPanel1.Controls.Clear();
                     foreach (Control card in gameCardList) flowLayoutPanel1.Controls.Add(card);
+                    //Debug.log("done loading in cards");
+                    break;
+                case DONE_LOCAL:
+                    createGameCards();
+                    flowLayoutPanel2.Controls.Clear();
+                    foreach (Control card in gameCardList) flowLayoutPanel2.Controls.Add(card);
                     //Debug.log("done loading in cards");
                     break;
             }
@@ -209,13 +257,13 @@ namespace GameCentralStation
 
         private void materialTabControl1_Selected(object sender, TabControlEventArgs e)
         {
-            //Debug.log("Selected...");
+            // Debug.log("Selected... " + e.TabPageIndex);
             runTask(e.TabPageIndex);
         }
 
         private void Mist_KeyUp(object sender, KeyEventArgs e)
         {
-            
+
 
         }
     }

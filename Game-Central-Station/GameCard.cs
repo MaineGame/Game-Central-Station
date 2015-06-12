@@ -23,6 +23,7 @@ namespace GameCentralStation
         private const int STATE_EXTRACTING = -3;
         private bool installed;
         private bool downloading;
+        private int zipLength;
 
         public GameCard()
         {
@@ -38,8 +39,8 @@ namespace GameCentralStation
         private void UninstalledGameCard_Load(object sender, EventArgs e)
         {
             progressBar1.Minimum = 0;
-            progressBar1.Maximum = game.zipLength;
-            
+            progressBar1.Maximum = Int32.MaxValue;
+
         }
 
         public void hardReload()
@@ -50,14 +51,14 @@ namespace GameCentralStation
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
 
-                name =
-
-
+            name =
 #if DEBUG
  game.id + " " +
 #endif
-                    game.displayName;
+ game.displayName;
 
+            if (!Globals.offline)
+            {
                 try
                 {
                     Image image = Image.FromStream(Globals.getFile("/games/" + game.id + "/default.jpg"));
@@ -77,6 +78,50 @@ namespace GameCentralStation
                         this.image = Image.FromStream(Globals.getFile("/games/default2.jpg"));
                     }
                 }
+            }
+            else
+            {
+                FileStream png = null;
+                FileStream jpg = null;
+                try
+                {
+                    jpg = new FileStream(Globals.root + "\\games\\" + game.id + "\\default.jpg", FileMode.Open);
+                    Image image = Image.FromStream(jpg);
+                    image = ScaleImage(image, 300, 100);
+                    this.image = image;
+                }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        png = new FileStream(Globals.root + "\\games\\" + game.id + "\\default.png", FileMode.Open);
+                        Image image = Image.FromStream(png);
+                        image = ScaleImage(image, 300, 100);
+                        this.image = image;
+                    }
+                    catch (Exception exc)
+                    {
+                        this.image = null;
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            png.Close();
+                        }
+                        catch (Exception exce) { }
+                    }
+                }
+                finally
+                {
+                    try
+                    {
+                        jpg.Close();
+                    }
+                    catch (Exception ex) { }
+                }
+
+            }
 
 
 
@@ -173,6 +218,7 @@ namespace GameCentralStation
 
         private void downloadWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            zipLength = Globals.getFtpFileSize("/games/" + game.id + "/current.zip");
             downloading = true;
             download();
             downloadWorker.ReportProgress(DONE);
@@ -240,13 +286,14 @@ namespace GameCentralStation
             }
             else if (e.ProgressPercentage == STATE_CONNECTING)
             {
+                progressBar1.Maximum = zipLength;
                 progressBar1.Style = ProgressBarStyle.Continuous;
                 progressBar1.Visible = true;
-                materialLabel1.Text = "Downloading " + 
+                materialLabel1.Text = "Downloading " +
 #if DEBUG
-                    game.id + " " + 
+ game.id + " " +
 #endif
-                    game.displayName + "...";
+ game.displayName + "...";
                 materialFlatButton1.Visible = false;
                 materialRaisedButton1.Visible = false;
                 materialFlatButton2.Visible = false;
@@ -260,7 +307,7 @@ namespace GameCentralStation
 #if DEBUG
  game.id + " " +
 #endif
-                    "...";
+ "...";
                 progressBar1.MarqueeAnimationSpeed = 20;
             }
             else

@@ -75,6 +75,19 @@ namespace GameCentralStation
             return args.Contains(arg);
         }
 
+        public static int getFtpFileSize(string file)
+        {
+            FtpWebRequest request = (FtpWebRequest)FtpWebRequest.Create(new Uri("ftp://" + FTPIP + file));
+            request.Proxy = null;
+            request.Credentials = new NetworkCredential(FTPUser, password);
+            request.Method = WebRequestMethods.Ftp.GetFileSize;
+
+            FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+            int size = (int)response.ContentLength;
+            response.Close();
+            return size;
+        }
+
         public static int hash(String str)
         {
             int prime = 164973157;

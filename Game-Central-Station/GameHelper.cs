@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,6 +82,27 @@ namespace GameCentralStation
             {
                 Game game = new Game(contract);
                 return game;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public static Game getGame(string directory)
+        {
+            try
+            {
+                GameContract contract = new GameContract();
+                contract.archived = "false";
+                contract.executableName = File.ReadAllLines(directory + "\\executable.dat")[0];
+                contract.id = directory.Substring(directory.LastIndexOf('\\') + 1);
+                contract.idGroup = contract.id;
+                contract.name = File.ReadAllLines(directory + "\\game.dat")[0];
+                contract.ready = "true";
+                contract.versionString = "1";
+                contract.zipLength = "0";
+                return getGame(contract);
             }
             catch (Exception e)
             {

@@ -29,8 +29,11 @@ namespace GameCentralStation
                 materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
                 materialSkinManager.ColorScheme = new ColorScheme(Primary.LightBlue700, Primary.LightBlue800, Primary.Red100, Accent.Amber200, TextShade.WHITE);
                 new Connect().ShowDialog();
-                if (DatabaseHelper.connection != null && DatabaseHelper.connection.State == System.Data.ConnectionState.Open)
-                    Application.Run(new Mist());
+
+                if (Globals.offline)
+                    materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey700, Primary.BlueGrey800, Primary.Red100, Accent.Cyan400, TextShade.WHITE);
+
+                Application.Run(new Mist());
                 
             }
             catch (Exception e)
