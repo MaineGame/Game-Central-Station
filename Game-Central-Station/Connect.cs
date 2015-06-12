@@ -23,6 +23,16 @@ namespace GameCentralStation
 
         private static string checkingUpdates = "Checking for Updates";
         private static string connectingToDatabase = "Connecting to Game Central Station";
+        private static string checkingInternet = "Checking internet conenction";
+        private static string updatingGame = "Installing updates for {0}...";
+
+        private const int DONE = -1;
+        private const int CONNECTING = -2;
+        private const int CHECKING_UPDATES = -3;
+        private const int CHECKING_INTERNET = -4;
+
+        private Game currentlyUpdatingGame = null;
+
         private const string ftpIP = "169.244.195.143/Installer";
         private const string username = "GCSUser";
         //link to ftp://GCSUser:@169.244.195.143/Installer/GCSInstaller.exe
@@ -50,6 +60,22 @@ namespace GameCentralStation
             backgroundWorker1.RunWorkerAsync();
         }
 
+        private bool sanityCheck()
+        {
+            try
+            {
+                using (var client = new WebClient())
+                using (var stream = client.OpenRead("http://www.google.com"))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private void connectToDatabase() {
             try
             {
@@ -70,9 +96,6 @@ namespace GameCentralStation
             }
         }
 
-        private const int DONE = -1;
-        private const int CONNECTING = -2;
-        private const int CHECKING_UPDATES = -3;
 
         public static string AssemblyDirectory
         {
@@ -85,7 +108,7 @@ namespace GameCentralStation
             }
         }
 
-        private void checkUpdates()
+        private void checkGcsUpdates()
         {
 
             try
@@ -119,7 +142,6 @@ namespace GameCentralStation
                 Int32.TryParse(Encoding.ASCII.GetString(File.ReadAllBytes(AssemblyDirectory + "\\version.txt")), out localVersion);
 
                 #endregion
-
 
                 if (ftpVersion > localVersion)
                 {
@@ -170,13 +192,25 @@ namespace GameCentralStation
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            backgroundWorker1.ReportProgress(CHECKING_UPDATES);
-            checkUpdates();
-            backgroundWorker1.ReportProgress(CONNECTING);
-            connectToDatabase();
+            //made this a method and not a static constructor because this is the part that
+            //will do everything that is absolutely required by the main GCS window.
+            backgroundWorker1.ReportProgress(CHECKING_INTERNET);
+            Globals.initializeGlobals();
 
-            if (Globals.kioskMode)
-                Globals.updateAll();
+            if (!Globals.offline)
+            {
+                backgroundWorker1.ReportProgress(CHECKING_UPDATES);
+                checkGcsUpdates();
+                backgroundWorker1.ReportProgress(CONNECTING);
+                connectToDatabase();
+
+                if (Globals.kioskMode)
+                    Globals.updateAll();
+            }
+            else
+            {
+                //TODO WHAT TO DO IF OFFLINE
+            }
 
             backgroundWorker1.ReportProgress(DONE);
 
@@ -194,6 +228,9 @@ namespace GameCentralStation
                     break;
                 case CONNECTING:
                     Text = connectingToDatabase;
+                    break;
+                case CHECKING_INTERNET:
+                    Text = checkingInternet;
                     break;
             }
 

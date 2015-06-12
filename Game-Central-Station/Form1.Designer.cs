@@ -46,7 +46,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -68,12 +67,12 @@
             this.materialTabControl1.Controls.Add(this.tabPage3);
             this.materialTabControl1.Controls.Add(this.tabPage4);
             this.materialTabControl1.Depth = 0;
-            this.materialTabControl1.Location = new System.Drawing.Point(0, 92);
+            this.materialTabControl1.Location = new System.Drawing.Point(0, 96);
             this.materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialTabControl1.Name = "materialTabControl1";
             this.materialTabControl1.Padding = new System.Drawing.Point(0, 0);
             this.materialTabControl1.SelectedIndex = 0;
-            this.materialTabControl1.Size = new System.Drawing.Size(945, 508);
+            this.materialTabControl1.Size = new System.Drawing.Size(945, 504);
             this.materialTabControl1.TabIndex = 0;
             this.materialTabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.materialTabControl1_Selected);
             // 
@@ -84,7 +83,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Margin = new System.Windows.Forms.Padding(0);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(937, 482);
+            this.tabPage1.Size = new System.Drawing.Size(937, 478);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Store";
             // 
@@ -97,7 +96,7 @@
             this.panel2.Controls.Add(this.flowLayoutPanel1);
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(937, 482);
+            this.panel2.Size = new System.Drawing.Size(937, 478);
             this.panel2.TabIndex = 1;
             // 
             // flowLayoutPanel1
@@ -110,7 +109,7 @@
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(4);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(937, 482);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(937, 478);
             this.flowLayoutPanel1.TabIndex = 5;
             // 
             // tabPage2
@@ -119,7 +118,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(937, 482);
+            this.tabPage2.Size = new System.Drawing.Size(937, 478);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Library";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -132,7 +131,7 @@
             this.panel3.BackColor = System.Drawing.Color.Gainsboro;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(834, 421);
+            this.panel3.Size = new System.Drawing.Size(937, 478);
             this.panel3.TabIndex = 2;
             // 
             // tabPage3
@@ -140,7 +139,7 @@
             this.tabPage3.Controls.Add(this.panel4);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(937, 482);
+            this.tabPage3.Size = new System.Drawing.Size(937, 478);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Downloads";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -153,7 +152,7 @@
             this.panel4.BackColor = System.Drawing.Color.Gainsboro;
             this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(834, 421);
+            this.panel4.Size = new System.Drawing.Size(937, 478);
             this.panel4.TabIndex = 2;
             // 
             // tabPage4
@@ -161,7 +160,7 @@
             this.tabPage4.Controls.Add(this.panel5);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(937, 482);
+            this.tabPage4.Size = new System.Drawing.Size(937, 478);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "About";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -199,7 +198,7 @@
             // 
             this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.pictureBox1.BackColor = System.Drawing.Color.Gainsboro;
-            this.pictureBox1.Image = global::GameCentralStation.Properties.Resources.logo;
+            this.pictureBox1.Image = global::GameCentralStation.Properties.Resources.logo_big;
             this.pictureBox1.Location = new System.Drawing.Point(78, 16);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(210, 224);
@@ -256,7 +255,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.materialTabSelector1.BaseTabControl = this.materialTabControl1;
             this.materialTabSelector1.Depth = 0;
-            this.materialTabSelector1.Location = new System.Drawing.Point(-15, 60);
+            this.materialTabSelector1.Location = new System.Drawing.Point(-14, 64);
             this.materialTabSelector1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialTabSelector1.Name = "materialTabSelector1";
             this.materialTabSelector1.Size = new System.Drawing.Size(960, 32);
@@ -273,26 +272,14 @@
             this.pictureBox2.TabIndex = 4;
             this.pictureBox2.TabStop = false;
             // 
-            // panel1
-            // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.BackColor = System.Drawing.Color.Gainsboro;
-            this.panel1.Location = new System.Drawing.Point(-1, 82);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(946, 525);
-            this.panel1.TabIndex = 0;
-            // 
             // Mist
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(945, 600);
-            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.materialTabSelector1);
+            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.materialTabControl1);
-            this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Mist";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -322,7 +309,6 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.Label label3;

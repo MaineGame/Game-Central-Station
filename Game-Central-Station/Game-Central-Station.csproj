@@ -177,6 +177,7 @@
     <Content Include="config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Properties\logo-big.png" />
     <Content Include="Properties\logo.ico" />
     <Content Include="Properties\logo.png" />
     <Content Include="version.txt">

@@ -54,6 +54,22 @@ namespace GameCentralStation
 
         private void Mist_Load(object sender, EventArgs e)
         {
+#if DEBUG
+            Text += " [Debug Mode]";
+            if (Globals.kioskMode)
+                Text += " [Kiosk Mode]";
+#endif
+
+            if (Globals.kioskMode)
+            {
+                materialTabControl1.Height += materialTabSelector1.Height;
+                var location = materialTabControl1.Location;
+                location.Y -= materialTabSelector1.Height;
+                materialTabControl1.Location = location;
+                materialTabSelector1.Visible = false;
+                materialTabSelector1.Enabled = false;
+
+            }
 
             newBackgroundWorker();
             string version = File.ReadAllText(Globals.root + "\\version.txt");
@@ -123,7 +139,7 @@ namespace GameCentralStation
                 gameCardList.Add(gameCard);
             }
 
-            Debug.log("Done creating cards");
+            //Debug.log("Done creating cards");
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -133,7 +149,7 @@ namespace GameCentralStation
             {
                 case STORE:
                     {
-                        Debug.log("RELOADING STORE HARD");
+                        //ebug.log("RELOADING STORE HARD");
 
                         reloadStoreGamesList();
                     }
@@ -142,7 +158,7 @@ namespace GameCentralStation
                     break;
                 case STORE_HARD:
                     {
-                        Debug.log("RELOADING STORE HARD");
+                        //Debug.log("RELOADING STORE HARD");
 
                         reloadStoreGamesList();
                     }
@@ -180,7 +196,7 @@ namespace GameCentralStation
                     addGamesToStore();
                     flowLayoutPanel1.Controls.Clear();
                     foreach (Control card in gameCardList) flowLayoutPanel1.Controls.Add(card);
-                    Debug.log("done loading in cards");
+                    //Debug.log("done loading in cards");
                     break;
             }
 
@@ -193,7 +209,7 @@ namespace GameCentralStation
 
         private void materialTabControl1_Selected(object sender, TabControlEventArgs e)
         {
-            Debug.log("Selected...");
+            //Debug.log("Selected...");
             runTask(e.TabPageIndex);
         }
 

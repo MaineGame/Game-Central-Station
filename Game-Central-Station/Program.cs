@@ -23,14 +23,15 @@ namespace GameCentralStation
         {
             try
             {
-                Globals.loadArgs();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 var materialSkinManager = MaterialSkinManager.Instance;
                 materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
                 materialSkinManager.ColorScheme = new ColorScheme(Primary.LightBlue700, Primary.LightBlue800, Primary.Red100, Accent.Amber200, TextShade.WHITE);
                 new Connect().ShowDialog();
-                Application.Run(new Mist());
+                if (DatabaseHelper.connection != null && DatabaseHelper.connection.State == System.Data.ConnectionState.Open)
+                    Application.Run(new Mist());
+                
             }
             catch (Exception e)
             {

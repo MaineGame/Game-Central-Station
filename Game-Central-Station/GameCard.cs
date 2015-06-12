@@ -39,6 +39,7 @@ namespace GameCentralStation
         {
             progressBar1.Minimum = 0;
             progressBar1.Maximum = game.zipLength;
+            
         }
 
         public void hardReload()
@@ -121,7 +122,7 @@ namespace GameCentralStation
                     if (installed)
                     {
                         materialFlatButton2.Visible = false;
-                        materialFlatButton1.Visible = true;
+                        materialFlatButton1.Visible = true && !Globals.kioskMode;
                         materialRaisedButton1.Visible = true;
                     }
                     else
@@ -232,7 +233,7 @@ namespace GameCentralStation
         {
             if (e.ProgressPercentage == DONE)
             {
-                Debug.log("Done installing game?");
+                // Debug.log("Done installing game?");
                 downloading = false;
                 progressBar1.Visible = false;
                 hardReload();

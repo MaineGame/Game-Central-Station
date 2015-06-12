@@ -18,7 +18,7 @@ namespace GameCentralStation
         {
             lock (connection)
             {
-                if(connection.State != System.Data.ConnectionState.Open) connection.Open();
+                if (connection.State != System.Data.ConnectionState.Open) connection.Open();
 
                 //if this ever ACTUALLY tries to open up a dialog, it will fail because
                 //materialskin and cross threadin even nastier than winforms cross threading.
@@ -34,29 +34,21 @@ namespace GameCentralStation
 
                 while (reader.Read())
                 {
-                    try
+                    GameContract contract = new GameContract
                     {
-                        GameContract contract = new GameContract
-                        {
-                            executableName = reader["executable"].ToString(),
-                            versionString = reader["gameVersion"].ToString(),
-                            name = reader["gameName"].ToString(),
-                            id = reader["gameID"].ToString(),
-                            zipLength = reader["zipLength"].ToString(),
-                            archived = reader["archived"].ToString(),
-                            ready = reader["ready"].ToString(),
-                            uploadTimeStamp = reader["uploadTimeStamp"].ToString(),
-                            idGroup = reader["idGroup"].ToString()
-                        };
-                        Game game = Game.getGame(contract);
-                        if (contract != null)
-                            games.Add(game);
-                    }
-                    catch (Exception e)
-                    {
-                        //some part of this listing was malformed.
-                        Globals.sendErrorLog(e);
-                    }
+                        executableName = reader["executable"].ToString(),
+                        versionString = reader["gameVersion"].ToString(),
+                        name = reader["gameName"].ToString(),
+                        id = reader["gameID"].ToString(),
+                        zipLength = reader["zipLength"].ToString(),
+                        archived = reader["archived"].ToString(),
+                        ready = reader["ready"].ToString(),
+                        uploadTimeStamp = reader["uploadTimeStamp"].ToString(),
+                        idGroup = reader["idGroup"].ToString()
+                    };
+                    Game game = Game.getGame(contract);
+                    if (contract != null)
+                        games.Add(game);
                 }
 
                 reader.Close();

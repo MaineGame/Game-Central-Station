@@ -8,6 +8,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -38,11 +39,12 @@ namespace GameCentralStation
             Globals.root = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         }
 
-        public const string FTPIP = "169.244.195.143";
-        public const string FTPUser = "GCSUser";
-        public const string password = "";
+        public static string FTPIP = "169.244.195.143";
+        public static string FTPUser = "GCSUser";
+        public static string password = "";
         private static Random random = new Random();
         public static string userName = null;
+        public static bool offline = true;
 
         public static void openGame(Game game)
         {
@@ -100,18 +102,14 @@ namespace GameCentralStation
             return responseStream;
         }
 
-        internal static void sendErrorLog(Exception e)
-        {
-            throw new NotImplementedException();
-        }
-
-
-
-
         private static Image controller = null;
 
         //TODO make this cached and stuff.
 
+        /// <summary>
+        /// old horribly inefficient method for create a stock image on the fly
+        /// </summary>
+        /// <returns></returns>
         public static Image createController()
         {
 
@@ -157,7 +155,7 @@ namespace GameCentralStation
             return controller;
         }
 
-        public static void loadArgs()
+        public static void initializeGlobals()
         {
 
             string[] args = File.ReadAllLines(root + "\\config");
@@ -165,13 +163,57 @@ namespace GameCentralStation
             Globals.args = args;
 
             kioskMode = args.Contains<string>("-K");
-            if (kioskMode) Debug.log("Kiosk Mode enabled.");
+            // if (kioskMode) Debug.log("Kiosk Mode enabled.");
 
+            offline = !CheckForInternetConnection();
+
+            // Debug.log("you are " + (offline ? "offline" : "online") + ".");
+
+        }
+        /// <summary>
+        /// checks for the internet connection, not sure to use ping or proper HTTP
+        /// request. 
+        /// TODO make that depend on kiosk mode maybe
+        /// </summary>
+        /// <returns></returns>
+        private static bool CheckForInternetConnection()
+        {
+
+            try
+            {
+                Ping myPing = new Ping();
+                String host = "google.com";
+                byte[] buffer = new byte[32];
+                int timeout = 1000;
+                PingOptions pingOptions = new PingOptions();
+                PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
+                return (reply.Status == IPStatus.Success);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            /*
+            try
+            {
+                using (var client = new WebClient())
+                using (var stream = client.OpenRead("http://www.google.com"))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+             */
         }
 
         public static bool
             kioskMode { get; set; }
 
+        //TODO seriously make this download thing modular.
+        //if i yell at myself enough to do it, it might get done.
         internal static void updateAll()
         {
             if (Directory.Exists("" + Globals.root + "\\games\\"))
@@ -236,7 +278,5 @@ namespace GameCentralStation
             }
         }
     }
-
-    //because everything pumps out of here a as a string.
 
 }
