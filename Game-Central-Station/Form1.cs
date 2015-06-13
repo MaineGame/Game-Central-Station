@@ -165,7 +165,7 @@ namespace GameCentralStation
                         Debug.log("RELOADING STORE");
 
                         reloadStoreGamesList();
-                        backgroundWorker1.ReportProgress(DONE_STORE);
+                        ((BackgroundWorker)sender).ReportProgress(DONE_STORE);
                     }
                     break;
                 case LIBRARY:
@@ -174,7 +174,7 @@ namespace GameCentralStation
 
                         reloadLocalGamesList();
 
-                        backgroundWorker1.ReportProgress(DONE_LOCAL);
+                        ((BackgroundWorker)sender).ReportProgress(DONE_LOCAL);
                     }
                     break;
 
