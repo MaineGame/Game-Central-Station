@@ -162,7 +162,8 @@ namespace GameCentralStation
                     else Process.Start(AssemblyDirectory + "\\GCSInstaller.exe");
 
 
-                    Application.Exit();
+                    Environment.Exit(-1);
+                    
                     #endregion
                 }
 

@@ -41,6 +41,18 @@ namespace GameCentralStation
             progressBar1.Minimum = 0;
             progressBar1.Maximum = Int32.MaxValue;
 
+            if (Globals.kioskMode)
+            {
+                
+                double screenWidth = Screen.PrimaryScreen.Bounds.Width;
+                double screenHeight = Screen.PrimaryScreen.Bounds.Height;
+                double margin = 8;
+
+                //do the resizing here...
+                Width = (int)(Math.Floor((screenWidth - (margin * 4d)) / 3d));
+                Height = (int)(Math.Floor((Width / 16d) * 9d)) + 72;
+            }
+
         }
 
         public void hardReload()

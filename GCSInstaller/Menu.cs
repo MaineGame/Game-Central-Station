@@ -176,7 +176,7 @@ namespace GCSInstaller
                 if (Program.auto)
                 {
                     Close();
-                    System.Diagnostics.Process.Start(installDir + "\\Game-Central-Station.exe", "-K");
+                    System.Diagnostics.Process.Start(installDir + "\\Game-Central-Station.exe");
                 }
             }
             else if (e.ProgressPercentage == UPDATE_NAME)
