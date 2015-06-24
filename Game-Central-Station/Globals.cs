@@ -39,6 +39,8 @@ namespace GameCentralStation
             Globals.root = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         }
 
+        public const string credits = "Special Thanks to YBloc, Perloff Foundation, TheCrankyLawyer, Terry Shehata, Owen Oakes, Steven Mallory, Bob Gott, Tim Capstack, Wade Brainerd, Charles Carter, Luke Thomas, Katrina Petersen Larrabee, Dylan Roy, Joseph L., Blair MacIntyre, Susan B McDonough, Sarah Robinson, Ilja Heitlager, Shawn Gott, Maureen Ireland.";
+
         public static string FTPIP = "169.244.195.143";
         public static string FTPUser = "GCSUser";
         public static string password = "";
@@ -50,7 +52,7 @@ namespace GameCentralStation
         {
             try
             {
-                if (process != null) process.Kill();
+                if (process != null && !process.HasExited) process.Kill();
                 process = new Process();
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.FileName = Globals.root + "\\games\\" + game.id + "\\" + game.executableName;
@@ -234,57 +236,65 @@ namespace GameCentralStation
                 string[] games = Directory.GetDirectories("" + Globals.root + "\\games\\");
                 foreach (string file in games)
                 {
-
+                    //MODULAAAAAAAAAAAAAAAAAR,
+                    //admit it me, ts not going to happen...
                     string id = file.Substring(file.LastIndexOf('\\') + 1);
 
                     Game game = DatabaseHelper.getGamesWhere("gameID = " + id)[0];
                     string groupID = "" + game.idGroup;
-
-                    Game newGame = DatabaseHelper.getGamesWhere("idGroup = " + groupID + " and archived = false and ready = true")[0];
-
-                    if (game.id != newGame.id)
+                    try
                     {
-                        Debug.log("Found update for " + game.displayName);
-                        //TODO MAKE THIS SHIT MORE MODULAR. UGH.
+                        Game newGame = DatabaseHelper.getGamesWhere("idGroup = " + groupID + " and archived = false and ready = true")[0];
 
-                        #region nasty download
-
-                        #region download and extracting the game data files
-
-                        //establish a new webclient because downloading is a thing.
-                        WebClient client = new WebClient();
-
-                        Directory.CreateDirectory(Globals.root + "\\games");
-                        Directory.CreateDirectory(Globals.root + "\\games\\" + newGame.id);
-
-                        if (Directory.Exists(Globals.root + "\\games\\" + newGame.id))
-                            //delete the old if you have one
-                            Directory.Delete(Globals.root + "\\games\\" + newGame.id, true);
-
-                        //download it
-                        try
+                        if (game.id != newGame.id)
                         {
-                            client.Credentials = new NetworkCredential(Globals.FTPUser, Globals.password);
-                            client.DownloadFileTaskAsync(new Uri("ftp://" + Globals.FTPIP + "/games/" + newGame.id + "/current.zip"), "" + Globals.root + "\\games\\temp.zip").Wait();
+                            Debug.log("Found update for " + game.displayName);
+                            //TODO MAKE THIS SHIT MORE MODULAR. UGH.
+
+                            #region nasty download
+
+                            #region download and extracting the game data files
+
+                            //establish a new webclient because downloading is a thing.
+                            WebClient client = new WebClient();
+
+                            Directory.CreateDirectory(Globals.root + "\\games");
+                            Directory.CreateDirectory(Globals.root + "\\games\\" + newGame.id);
+
+                            if (Directory.Exists(Globals.root + "\\games\\" + newGame.id))
+                                //delete the old if you have one
+                                Directory.Delete(Globals.root + "\\games\\" + newGame.id, true);
+
+                            //download it
+                            try
+                            {
+                                client.Credentials = new NetworkCredential(Globals.FTPUser, Globals.password);
+                                client.DownloadFileTaskAsync(new Uri("ftp://" + Globals.FTPIP + "/games/" + newGame.id + "/current.zip"), "" + Globals.root + "\\games\\temp.zip").Wait();
+
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }
+
+
+                            //then you know, actually start that bit...
+                            ZipFile.ExtractToDirectory(Globals.root + "\\games\\temp.zip", Globals.root + "\\games\\" + newGame.id);
+                            //File.Delete(Globals.root + "\\games\\temp.zip");
+
+                            //houston, we're done here.
+                            #endregion
+
+                            Directory.Delete(Globals.root + "\\games\\" + game.id, true);
+
+                            #endregion
 
                         }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
-
-
-                        //then you know, actually start that bit...
-                        ZipFile.ExtractToDirectory(Globals.root + "\\games\\temp.zip", Globals.root + "\\games\\" + newGame.id);
-                        //File.Delete(Globals.root + "\\games\\temp.zip");
-
-                        //houston, we're done here.
-                        #endregion
-
-                        Directory.Delete(Globals.root + "\\games\\" + game.id, true);
-
-                        #endregion
-
+                    }
+                    catch (Exception e)
+                    {
+                        //meh
+                        
                     }
 
                 }

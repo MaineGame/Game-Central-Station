@@ -29,6 +29,7 @@ namespace GameCentralStation
         private const int ABOUT = 3;
         private int task = 0;
         private BackgroundWorker backgroundWorker1;
+        private Label credits;
 
         private MaterialSkinManager manager = MaterialSkinManager.Instance;
 
@@ -37,7 +38,15 @@ namespace GameCentralStation
             
             Globals.root = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             InitializeComponent();
-            
+
+            credits = new Label();
+            credits.Text = Globals.credits;
+            credits.Margin = new Padding(30, 20, 30, 20);
+            Font font = new Font(credits.Font.FontFamily, 20F);
+            credits.Font = font;
+            int screenWidth = Screen.PrimaryScreen.Bounds.Width;
+            credits.Size = new Size(screenWidth - 60, 100);
+
             manager.AddFormToManage(this);
         }
 
@@ -238,12 +247,14 @@ namespace GameCentralStation
                     createGameCards();
                     flowLayoutPanel1.Controls.Clear();
                     foreach (Control card in gameCardList) flowLayoutPanel1.Controls.Add(card);
+                    if(Globals.kioskMode) flowLayoutPanel1.Controls.Add(credits);
                     //Debug.log("done loading in cards");
                     break;
                 case DONE_LOCAL:
                     createGameCards();
                     flowLayoutPanel2.Controls.Clear();
                     foreach (Control card in gameCardList) flowLayoutPanel2.Controls.Add(card);
+                    if (Globals.kioskMode) flowLayoutPanel2.Controls.Add(credits);
                     //Debug.log("done loading in cards");
                     break;
             }
