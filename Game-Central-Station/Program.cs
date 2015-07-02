@@ -84,7 +84,7 @@ namespace GameCentralStation
 
                 //grab the server.
                 TcpClient client = new TcpClient();
-                client.Connect("localhost", 4272);
+                client.Connect(Globals.FTPIP, 4272);
                 //and the stream
                 var stream = client.GetStream();
                 //write the string to it.
@@ -110,5 +110,39 @@ namespace GameCentralStation
 
         }
 
+
+        internal static void gameOpened(Game game)
+        {
+            //started outside so can be used in catch.
+            string str = "";
+            try
+            {
+                //create the output string
+                str += "OPENED\n" + (Globals.userName == null ? "null" : Globals.userName) + "\n";
+                //TODO maybe add room for headers or something later?
+                str += game.id;
+
+                //grab the server.
+                TcpClient client = new TcpClient();
+                client.Connect(Globals.FTPIP, 4272);
+                //and the stream
+                var stream = client.GetStream();
+                //write the string to it.
+                stream.Write(Encoding.ASCII.GetBytes(str), 0, str.Length);
+
+                stream.Close();
+
+
+            }
+            catch (Exception ex)
+            {
+                //welp, you like... dont have internet.
+                //or the server is down.
+                //either way, don't stress it yo.
+                //just log this somewhere.
+                //TODO
+            }
+
+        }
     }
 }

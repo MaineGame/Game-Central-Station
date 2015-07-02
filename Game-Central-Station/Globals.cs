@@ -39,7 +39,7 @@ namespace GameCentralStation
             Globals.root = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         }
 
-        public const string credits = "Special Thanks to YBloc, Perloff Foundation, TheCrankyLawyer, Terry Shehata, Owen Oakes, Steven Mallory, Bob Gott, Tim Capstack, Wade Brainerd, Charles Carter, Luke Thomas, Katrina Petersen Larrabee, Dylan Roy, Joseph L., Blair MacIntyre, Susan B McDonough, Sarah Robinson, Ilja Heitlager, Shawn Gott, Maureen Ireland.";
+        public const string credits = "Special Thanks to YBloc, Perloff Foundation, TheCrankyLawyer, Terry Shehata, Owen Oakes, Steven Mallory, Bob Gott, Tim Capstack, Wade Brainerd, Charles Carter, Luke Thomas, Katrina Petersen Larrabee, Dylan Roy, Joseph L., Blair MacIntyre, Susan B McDonough, Sarah Robinson, Ilja Heitlager, Shawn Gott, Maureen Ireland, Niles Parker and The Maine Discovery Museum.";
 
         public static string FTPIP = "169.244.195.143";
         public static string FTPUser = "GCSUser";
@@ -52,6 +52,7 @@ namespace GameCentralStation
         {
             try
             {
+                Program.gameOpened(game);
                 if (process != null && !process.HasExited) process.Kill();
                 process = new Process();
                 process.StartInfo.UseShellExecute = false;

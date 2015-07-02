@@ -23,7 +23,7 @@ namespace GameCentralStation
 
         private static string checkingUpdates = "Checking for Updates";
         private static string connectingToDatabase = "Connecting to Game Central Station";
-        private static string checkingInternet = "Checking internet conenction";
+        private static string checkingInternet = "Checking internet connection";
         private static string updatingGame = "Installing updates for {0}...";
 
         private const int DONE = -1;
