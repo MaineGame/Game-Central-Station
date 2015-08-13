@@ -86,6 +86,8 @@ namespace GCSInstaller
                 //id we ever need more options than kiosk mode...
                 if (checkBox2.Checked)
                     File.WriteAllLines(installDir + "\\config", new string[] { "-K" });
+                else
+                    File.WriteAllLines(installDir + "\\config", new string[] { "" });
 
                 Close();
                 if(checkBox1.Checked)
