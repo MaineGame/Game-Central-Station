@@ -48,6 +48,13 @@ namespace GameCentralStation
         public static string userName = null;
         public static bool offline = true;
 
+        public static void restartInOffline()
+        {
+            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "Game-Central-Station.exe", "-offline");
+
+            Application.Exit();
+        }
+
         public static void openGame(Game game)
         {
             try
@@ -186,13 +193,14 @@ namespace GameCentralStation
             // Debug.log("you are " + (offline ? "offline" : "online") + ".");
 
         }
+
         /// <summary>
         /// checks for the internet connection, not sure to use ping or proper HTTP
         /// request. 
         /// TODO make that depend on kiosk mode maybe
         /// </summary>
         /// <returns></returns>
-        private static bool CheckForInternetConnection()
+        public static bool CheckForInternetConnection()
         {
 
             try

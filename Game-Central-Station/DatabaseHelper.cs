@@ -16,6 +16,9 @@ namespace GameCentralStation
 
         public static Game[] getGamesWhere(string where)
         {
+            if (Globals.CheckForInternetConnection())
+            {
+                #region internet related task
             lock (connection)
             {
                 if (connection.State != System.Data.ConnectionState.Open) connection.Open();
@@ -54,6 +57,13 @@ namespace GameCentralStation
                 reader.Close();
 
                 return games.ToArray<Game>();
+            }
+            #endregion
+            }
+            else
+            {
+                Globals.restartInOffline();
+                return null;
             }
         }
 
